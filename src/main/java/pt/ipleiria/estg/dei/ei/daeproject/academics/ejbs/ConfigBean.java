@@ -14,6 +14,12 @@ public class ConfigBean {
 
     @PostConstruct
     public void populateDB() {
-        userBean.create("test23", "password", "test@gmail.com","/pictures/test.png", Status.Active);
+
+        try {
+            userBean.create("test23", "password", "test@gmail.com","/pictures/test.png", Status.Active);
+            userBean.create("test14", "password", "test1@gmail.com","/pictures/test1.png", Status.Active);
+        } catch (Exception e) {
+            System.err.println("Startup user already exists or failed: " + e.getMessage());
+        }
     }
 }

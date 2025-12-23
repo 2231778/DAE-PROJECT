@@ -1,0 +1,196 @@
+package pt.ipleiria.estg.dei.ei.daeproject.academics.entities;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import org.w3c.dom.Text;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletionException;
+
+
+@Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllPublications",
+                query = "SELECT p FROM Publication p ORDER BY p.title" // JPQL
+        )
+})
+@Table(name = "publications")
+public class Publication {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String title;
+    private String description;
+    private String file;
+    private Boolean visibility;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+    private String ai_generated_summary;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    private User publisher; //This is the FK of the users
+    private String author; //This is the person who created it
+    @ManyToMany
+    @JoinTable(
+            name = "publication_tags",
+            joinColumns = @JoinColumn(name = "publication_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tags;
+
+    @OneToMany(mappedBy = "publication",fetch = FetchType.LAZY)
+    private List<Comment> comments;
+    @OneToMany(mappedBy = "publication")
+    @NotNull
+    private List<Rating> ratings;
+    @OneToMany(mappedBy = "publication")
+    private List<ActivityLog> publicationActivityLogs;
+
+
+
+    public Publication() {
+        this.tags = new ArrayList<Tag>();
+        this.comments = new ArrayList<Comment>();
+        this.ratings = new ArrayList<Rating>();
+        this.publicationActivityLogs = new ArrayList<ActivityLog>();
+    }
+
+    public Publication(String title, String description, String file, Boolean visibility, User publisher, String author) {
+        this.title = title;
+        this.description = description;
+        this.file = file;
+        this.visibility = true; // Created Visible
+        this.publisher = publisher;
+        this.author = author;
+        this.ai_generated_summary = "";
+        this.tags = new ArrayList<Tag>();
+        this.comments = new ArrayList<Comment>();
+        this.ratings = new ArrayList<Rating>();
+        this.publicationActivityLogs = new ArrayList<ActivityLog>();
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
+    }
+
+    public Boolean getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Boolean visibility) {
+        this.visibility = visibility;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getAi_generated_summary() {
+        return ai_generated_summary;
+    }
+
+    public void setAi_generated_summary(String ai_generated_summary) {
+        this.ai_generated_summary = ai_generated_summary;
+    }
+
+    public @NotNull User getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(@NotNull User publisher) {
+        this.publisher = publisher;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public @NotNull List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(@NotNull List<Rating> ratings) {
+        this.ratings = ratings;
+    }
+
+    public List<ActivityLog> getPublicationActivityLogs() {
+        return publicationActivityLogs;
+    }
+
+    public void setPublicationActivityLogs(List<ActivityLog> publicationActivityLogs) {
+        this.publicationActivityLogs = publicationActivityLogs;
+    }
+}
