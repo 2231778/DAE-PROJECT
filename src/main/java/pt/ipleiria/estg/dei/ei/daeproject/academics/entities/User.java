@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.UniqueElements;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Status;
 
 import javax.management.DescriptorKey;
@@ -11,7 +12,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllUsers",
+                query = "SELECT u FROM User u ORDER BY u.name"
+        ),
+        @NamedQuery(
+                name = "getUserByEmail",
+                query = "SELECT u FROM User u WHERE u.email = :email"
+        ),
+//        @NamedQuery(
+//                name = "getActiveUsers",
+//                query = "SELECT u FROM User u WHERE u.status = :status"
+//        )
+})
+@Table(name = "users",uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"email"})
+})
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="ROLE")
 public class User extends Versionable {
@@ -24,6 +41,7 @@ public class User extends Versionable {
     private String password;
     @Email
     @NotBlank
+
     private String email;
     @NotBlank
     private String profilePicture;
@@ -104,6 +122,10 @@ public class User extends Versionable {
         this.status = status;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -147,4 +169,16 @@ public class User extends Versionable {
     public void setUserActivityLogs(List<ActivityLog> userActivityLogs) {
         this.userActivityLogs = userActivityLogs;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", profilePicture='" + profilePicture + '\'' +
+                ", status=" + status +
+                '}';
+    }
+
 }

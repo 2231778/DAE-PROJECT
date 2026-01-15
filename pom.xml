@@ -26,29 +26,63 @@
       </dependency><dependency>
       <groupId>org.hibernate.orm</groupId>
       <artifactId>hibernate-core</artifactId>
-      <version>6.3.1.Final</version>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.jaxb</groupId>
-      <artifactId>jaxb-runtime</artifactId>
-      <version>4.0.3</version>
-    </dependency><dependency>
+      <version>6.0.2.Final</version>
+  </dependency>
+      <dependency>
+          <groupId>org.glassfish.jaxb</groupId>
+          <artifactId>jaxb-runtime</artifactId>
+          <version>3.0.2</version>
+      </dependency><dependency>
       <groupId>org.hibernate.validator</groupId>
       <artifactId>hibernate-validator</artifactId>
-      <version>8.0.1.Final</version>
-    </dependency>
-<dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
+      <version>7.0.5.Final</version>
+  </dependency>
       <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-engine</artifactId>
-        <version>${junit.version}</version>
-        <scope>test</scope>
-      </dependency>  </dependencies>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter-api</artifactId>
+          <version>${junit.version}</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter-engine</artifactId>
+          <version>${junit.version}</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>jakarta.mail</groupId>
+          <artifactId>jakarta.mail-api</artifactId>
+          <version>2.0.1</version>
+      </dependency>
+      <dependency>
+          <groupId>org.jboss.resteasy</groupId>
+          <artifactId>resteasy-core</artifactId>
+          <version>6.2.6.Final</version>
+          <scope>provided</scope>
+      </dependency><dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-api</artifactId>
+      <version>0.13.0</version>
+  </dependency>
+      <dependency>
+          <groupId>io.jsonwebtoken</groupId>
+          <artifactId>jjwt-impl</artifactId>
+          <version>0.13.0</version>
+          <scope>runtime</scope>
+      </dependency>
+      <dependency>
+          <groupId>io.jsonwebtoken</groupId>
+          <artifactId>jjwt-jackson</artifactId>
+          <version>0.13.0</version>
+          <scope>runtime</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.jboss.resteasy</groupId>
+          <artifactId>resteasy-multipart-provider</artifactId>
+          <version>6.2.12.Final</version>
+          <scope>provided</scope>
+      </dependency>
+  </dependencies>
 
   <build>
     <plugins>
