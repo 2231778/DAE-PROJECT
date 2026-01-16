@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.daeproject.academics.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -49,15 +50,20 @@ public class User extends Versionable {
     @Enumerated(EnumType.STRING) // Makes the Enum be like 0 ,1 ,2 ... We could use also the EnumType.String that would make it like a string !!!
     private Status status; // Custom Enum class !!!
     @OneToMany(mappedBy = "publisher", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Publication> publications;
     // Ratings not added here cause there will not be frequent show of the ratings of the user ( might even not make sense)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Subscription> subscriptions;
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Comment> comments;
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Rating> ratings;
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<ActivityLog> userActivityLogs;
 
     public User() {

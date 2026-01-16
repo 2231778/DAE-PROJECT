@@ -12,6 +12,7 @@ import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.PasswordDTO;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.UserCreateDTO;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.UserDTO;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs.UserBean;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.ActivityLog;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.User;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.security.Authenticated;
 
@@ -42,7 +43,7 @@ public class UserService {
     @RolesAllowed({"ADMIN"})
     public Response createUser(UserCreateDTO userCreateDTO) {
         try {
-            // Optional pre-check: nice message before hitting DB
+            // Optional pre-check: message before hitting DB
             if (userBean.findByEmail(userCreateDTO.getEmail()) != null) {
                 return Response.status(Response.Status.CONFLICT) // 409 Conflict
                         .entity("Email already in use")
@@ -173,5 +174,15 @@ public class UserService {
                     .entity("Failed to update email: " + e.getMessage())
                     .build();
         }
+    }
+
+    @GET
+    @Path("/my-activity")
+    public List<ActivityLog> getMyActivities(@Context SecurityContext securityContext) {
+        // Get the current authenticated user's ID from the SecurityContext
+        Integer userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
+
+        return userBean.findUserActivity(userId);
+
     }
 }

@@ -5,10 +5,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.RoleType;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Status;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Administrador;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Colaborador;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Responsavel;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.User;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.ActivityLogDTO;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.*;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.security.Hasher;
 
 import java.util.List;
@@ -114,6 +112,15 @@ public class UserBean {
     public List<User> findAll() {
         return entityManager
                 .createNamedQuery("getAllUsers", User.class)
+                .getResultList();
+    }
+
+    public List<ActivityLog> findUserActivity(Integer id) {
+
+
+        return entityManager
+                .createNamedQuery("getUserActivity", ActivityLog.class)
+                .setParameter("userId", id)
                 .getResultList();
     }
 

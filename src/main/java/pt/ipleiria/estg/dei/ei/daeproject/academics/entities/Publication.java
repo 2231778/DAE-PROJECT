@@ -1,8 +1,12 @@
 package pt.ipleiria.estg.dei.ei.daeproject.academics.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.w3c.dom.Text;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Status;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,13 +29,17 @@ public class Publication {
     private String title;
     private String description;
     private String file;
-    private Boolean visibility;
+    @NotNull
+    @Enumerated(EnumType.STRING) // Makes the Enum be like 0 ,1 ,2 ... We could use also the EnumType.String that would make it like a string !!!
+    private Visibility visibility; // Custom Enum class !!!
     @Column(name = "created_at", nullable = false, updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
     @Column(name = "updated_at", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedAt;
     private String ai_generated_summary;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @NotNull
     private User publisher; //This is the FK of the users
     private String author; //This is the person who created it
@@ -41,14 +49,16 @@ public class Publication {
             joinColumns = @JoinColumn(name = "publication_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
+    @JsonIgnore
     private List<Tag> tags;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "publication",fetch = FetchType.LAZY)
     private List<Comment> comments;
+    @JsonIgnore
     @OneToMany(mappedBy = "publication")
-    @NotNull
     private List<Rating> ratings;
     @OneToMany(mappedBy = "publication")
+    @JsonIgnore
     private List<ActivityLog> publicationActivityLogs;
 
 
@@ -58,13 +68,14 @@ public class Publication {
         this.comments = new ArrayList<Comment>();
         this.ratings = new ArrayList<Rating>();
         this.publicationActivityLogs = new ArrayList<ActivityLog>();
+        this.visibility = Visibility.VISIBLE; // Created Visible
     }
 
-    public Publication(String title, String description, String file, Boolean visibility, User publisher, String author) {
+    public Publication(String title, String description, String file, User publisher, String author) {
         this.title = title;
         this.description = description;
         this.file = file;
-        this.visibility = true; // Created Visible
+        this.visibility = Visibility.VISIBLE; // Created Visible
         this.publisher = publisher;
         this.author = author;
         this.ai_generated_summary = "";
@@ -110,11 +121,11 @@ public class Publication {
         this.file = file;
     }
 
-    public Boolean getVisibility() {
+    public Visibility getVisibility() {
         return visibility;
     }
 
-    public void setVisibility(Boolean visibility) {
+    public void setVisibility(Visibility visibility) {
         this.visibility = visibility;
     }
 

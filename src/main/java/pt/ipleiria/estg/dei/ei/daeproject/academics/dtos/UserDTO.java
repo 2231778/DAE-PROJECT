@@ -17,6 +17,7 @@ public class UserDTO {
     private String profilePicture;
     private Status status;
     private String role;
+    //TODO: SEE IF I PUT PUBLICATION OF USERS HERE
 
     public UserDTO() {
 
@@ -47,6 +48,7 @@ public class UserDTO {
                 role
         );
     }
+
     public static List<UserDTO> from(List<User> users) {
         return users.stream().map(UserDTO::from).collect(Collectors.toList());
     }

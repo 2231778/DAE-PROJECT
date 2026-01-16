@@ -3,11 +3,13 @@ import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.ActionType;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.RoleType;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Status;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Publication;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.User;
 
-import java.util.List;
+
+
 
 @Startup
 @Singleton
@@ -15,6 +17,10 @@ public class ConfigBean {
 
     @EJB
     private UserBean userBean;
+    @EJB
+    private PublicationBean publicationBean;
+    @EJB
+    private ActivityLogBean activityLogBean;
 
     @PostConstruct
     public void populateDB() {
@@ -24,13 +30,50 @@ public class ConfigBean {
             userBean.create("test14", "password", "test1@gmail.com","/pictures/test1.png",RoleType.RESPONSAVEL);
             User user = userBean.find(1);
 
+            userBean.create("publisher1", "password", "test2@gmail.com","/pictures/test2.png", RoleType.ADMIN);
+            userBean.create("publisher2", "password", "test3@gmail.com","/pictures/test3.png", RoleType.RESPONSAVEL);
 
-            System.out.println(user);
+
+            User publisher1 = userBean.find(3);
+            User publisher2 = userBean.find(4);
+
+            Publication pub1 = publicationBean.create("3D Modeling Basics",
+                    "Learn the fundamentals of 3D modeling using Blender and SketchUp.",
+                    "3d_modeling.pdf",
+                    publisher1,
+                    "Alice Johnson");
+
+            Publication pub2 = publicationBean.create("Introduction to AI",
+                    "A beginner-friendly guide to Artificial Intelligence concepts.",
+                    "ai_intro.pdf",
+                    publisher1,
+                    "John Doe");
+
+            publicationBean.create("Advanced Java Patterns",
+                    "Deep dive into design patterns for enterprise Java applications.",
+                    "java_patterns.pdf",
+                    publisher2,
+                    "Jane Smith");
+
+            publicationBean.create("Data Structures and Algorithms",
+                    "Essential data structures and algorithm techniques explained clearly.",
+                    "ds_algo.pdf",
+                    publisher2,
+                    "Bob Brown");
+            // Create some activity logs
+
+            activityLogBean.create(ActionType.CREATE, "Created publication 1", publisher1, pub1);
+            activityLogBean.create(ActionType.CREATE, "Created publication 2", publisher2, pub2);
+            activityLogBean.create(ActionType.UPDATE, "Updated publication 1", publisher1, pub1);
+            activityLogBean.create(ActionType.DELETE, "Deleted a comment on publication 2", publisher2, pub2);
 
 
-
+            activityLogBean.create(ActionType.CREATE, "Created publication 1", user, pub1);
+            activityLogBean.create(ActionType.CREATE, "Created publication 2", user, pub2);
         } catch (Exception e) {
             System.err.println("Startup user already exists or failed: " + e.getMessage());
         }
     }
+
+
 }
