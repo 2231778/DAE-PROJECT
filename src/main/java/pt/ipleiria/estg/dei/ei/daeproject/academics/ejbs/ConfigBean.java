@@ -23,6 +23,8 @@ public class ConfigBean {
     private ActivityLogBean activityLogBean;
     @EJB
     private CommentBean commentBean;
+    @EJB
+    private TagBean tagBean;
 
     @PostConstruct
     public void populateDB() {
@@ -82,6 +84,12 @@ public class ConfigBean {
 
             commentBean.create("AI concepts explained clearly.", pub2, user);
             commentBean.create("Looking forward to more AI tutorials.", pub2, publisher1);
+
+            // --- Tags ---
+            tagBean.create("3D Modeling", "All publications related to 3D modeling.");
+            tagBean.create("Artificial Intelligence", "Publications about AI concepts and applications.");
+            tagBean.create("Java", "Publications on Java programming, patterns, and best practices.");
+            tagBean.create("Data Structures", "Posts about algorithms, data structures, and problem-solving.");
 
         } catch (Exception e) {
             System.err.println("Startup user already exists or failed: " + e.getMessage());

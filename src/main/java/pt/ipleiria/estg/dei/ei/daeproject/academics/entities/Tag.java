@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.ei.daeproject.academics.entities;
 
 import jakarta.persistence.*;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class Tag {
     private Integer id;
     private String name;
     private String description;
-    private Boolean visibility;
+    private Visibility visibility;
     @ManyToMany(mappedBy = "tags")
     private List<Subscription> subscriptions;
     @ManyToMany(mappedBy = "tags")
@@ -28,12 +29,13 @@ public class Tag {
     public Tag() {
         this.subscriptions = new ArrayList<Subscription>();
         this.publications = new ArrayList<Publication>();
+        this.visibility = Visibility.VISIBLE;
     }
 
-    public Tag(String name, String description, Boolean visibility) {
+    public Tag(String name, String description) {
         this.name = name;
         this.description = description;
-        this.visibility = true;
+        this.visibility = Visibility.VISIBLE;
     }
 
     public Integer getId() {
@@ -56,11 +58,11 @@ public class Tag {
         this.description = description;
     }
 
-    public Boolean getVisibility() {
+    public Visibility getVisibility() {
         return visibility;
     }
 
-    public void setVisibility(Boolean visibility) {
+    public void setVisibility(Visibility visibility) {
         this.visibility = visibility;
     }
 
