@@ -2,19 +2,27 @@ package pt.ipleiria.estg.dei.ei.daeproject.academics.ws;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
+import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.CommentDTO;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.PublicationDTO;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.UserDTO;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs.CommentBean;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs.PublicationBean;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs.UserBean;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Comment;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Publication;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.User;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.security.Authenticated;
 
 import java.util.List;
+import java.util.Map;
 
 @Path("publications") // relative url web path for this service
 @Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
@@ -25,11 +33,13 @@ public class PublicationService {
     private PublicationBean publicationBean;
     @EJB
     private UserBean userBean;
+    @EJB
+    private CommentBean commentBean;
 
     @GET
     @Path("/")
     public List<PublicationDTO> getAllPublications() {
-        return PublicationDTO.from(publicationBean.findAll()) ;
+        return PublicationDTO.from(publicationBean.findAll());
     }
 
     @GET
@@ -47,6 +57,8 @@ public class PublicationService {
     }
 
 
+
+
     //TODO: MAKE THE FILE UPLOAD
     @POST
     @Path("/")
@@ -60,11 +72,7 @@ public class PublicationService {
                         .build();
             }
 
-            if( publicationDTO.getVisibility() != Visibility.INVISIBLE || publicationDTO.getVisibility() != Visibility.VISIBLE){
-                return Response.status(Response.Status.BAD_REQUEST)
-                        .entity("VISIBILITY {"+publicationDTO.getVisibility()+"} is incorrect (Should be ACTIVE OR INACTIVE )")
-                        .build();
-            }
+
 
             Publication newPublication = publicationBean.create(
                     publicationDTO.getTitle(),
@@ -91,22 +99,22 @@ public class PublicationService {
     //TODO: UPDATE THE FILE
     @PATCH
     @Path("/{id}")
-    public Response updatePublication(@PathParam("id") Integer id,PublicationDTO publicationDTO) {
+    public Response updatePublication(@PathParam("id") Integer id, PublicationDTO publicationDTO) {
         try {
 
-             publicationBean.update(
-                     id,
-                     publicationDTO.getTitle(),
-                     publicationDTO.getDescription(),
-                     publicationDTO.getFile(),
-                     publicationDTO.getAuthor()
-             );
+            publicationBean.update(
+                    id,
+                    publicationDTO.getTitle(),
+                    publicationDTO.getDescription(),
+                    publicationDTO.getFile(),
+                    publicationDTO.getAuthor()
+            );
 
 
-             //TODO: ( DELETE THE OLD FILE )
-             //TODO: ( ADD THE NEW FILE )
+            //TODO: ( DELETE THE OLD FILE )
+            //TODO: ( ADD THE NEW FILE )
 
-             // Return the updated Publication
+            // Return the updated Publication
             Publication updatedPublication = publicationBean.find(id);
             return Response.ok(PublicationDTO.from(updatedPublication)).build();
         } catch (IllegalArgumentException e) {
@@ -123,7 +131,7 @@ public class PublicationService {
     }
 
     @PATCH
-    @Path("/{id}/visility")
+    @Path("/{id}/visibility")
     public Response updateUserStatus(@PathParam("id") Integer id) {
         try {
             publicationBean.toggleVisibility(id);
@@ -146,4 +154,99 @@ public class PublicationService {
         publicationBean.remove(id);
         return Response.noContent().build(); // 204 No Content
     }
+
+    //---------------------- COMMENTS --------------
+
+    @GET
+    @Path("/{id}/comments")
+    public Response getPublicationComments(@PathParam("id") Integer id) {
+        List<Comment> comments = publicationBean.findAllComments(id);
+        if (comments == null) {
+
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(Map.of("message", "Publication not found"))
+                    .build();
+        }
+        List<CommentDTO> dto = CommentDTO.from(comments);
+        return Response.ok(dto).build();
+    }
+
+    @POST
+    @Path("/{id}")
+    public Response createComment(@PathParam("id") Integer id, @Context SecurityContext securityContext, CommentDTO commentDTO) {
+
+        Integer userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
+
+
+        try {
+            CommentDTO dto = commentBean.createAndReturnDTO(commentDTO.getContent(), id, userId);
+            return Response.ok(dto).build();
+        } catch (EntityNotFoundException e) {
+            // Map the EntityNotFoundException to a 404 Not Found or 400 Bad Request
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            // Catch any other unexpected exceptions and log them
+            // Log.error("Unexpected error creating comment", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("An unexpected error occurred: " + e.getMessage())
+                    .build();
+        }
+    }
+
+    @PATCH
+    @Path("/{idPublication}/comments/{idComment}")
+    public Response updateComment(
+            @PathParam("idPublication") Integer idPublication,
+            @PathParam("idComment") Integer idComment,
+            CommentDTO commentDTO) {
+
+        Comment comment = commentBean.find(idComment);
+        if (comment == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Comment not found")
+                    .build();
+        }
+
+
+        if (!comment.getPublication().getId().equals(idPublication)) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Comment does not belong to this publication")
+                    .build();
+        }
+
+        CommentDTO dto = commentBean.update(idComment, commentDTO.getContent());
+
+        return Response.ok(dto).build();
+    }
+
+    @DELETE
+    @Path("/{idPublication}/comments/{idComment}")
+    public Response deleteComment(
+            @PathParam("idPublication") Integer idPublication,
+            @PathParam("idComment") Integer idComment) {
+
+        Comment comment = commentBean.find(idComment);
+        if (comment == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Comment not found")
+                    .build();
+        }
+
+
+        if (!comment.getPublication().getId().equals(idPublication)) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Comment does not belong to this publication")
+                    .build();
+        }
+
+
+        commentBean.delete(idComment);
+
+        return Response.noContent().build(); // 204 is better for DELETE
+    }
+
+
+
 }

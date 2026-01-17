@@ -8,6 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.RoleType;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.ActivityLogDTO;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.PasswordDTO;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.UserCreateDTO;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.UserDTO;
@@ -178,11 +179,18 @@ public class UserService {
 
     @GET
     @Path("/my-activity")
-    public List<ActivityLog> getMyActivities(@Context SecurityContext securityContext) {
+    public Response getMyActivities(@Context SecurityContext securityContext) {
         // Get the current authenticated user's ID from the SecurityContext
         Integer userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
 
-        return userBean.findUserActivity(userId);
+        List<ActivityLog> userActivity = userBean.findUserActivity(userId);
 
+        List<ActivityLogDTO> dto = ActivityLogDTO.from(userActivity);
+
+        if (dto.isEmpty()) {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+
+        return Response.ok(dto).build();
     }
 }

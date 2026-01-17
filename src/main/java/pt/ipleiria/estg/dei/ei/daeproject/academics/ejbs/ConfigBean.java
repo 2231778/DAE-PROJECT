@@ -21,6 +21,8 @@ public class ConfigBean {
     private PublicationBean publicationBean;
     @EJB
     private ActivityLogBean activityLogBean;
+    @EJB
+    private CommentBean commentBean;
 
     @PostConstruct
     public void populateDB() {
@@ -70,6 +72,17 @@ public class ConfigBean {
 
             activityLogBean.create(ActionType.CREATE, "Created publication 1", user, pub1);
             activityLogBean.create(ActionType.CREATE, "Created publication 2", user, pub2);
+
+            // ------------------------
+            // Comments creation
+            // ------------------------
+            // Add some comments to pub1 and pub2
+            commentBean.create("This is a great introduction to 3D modeling!", pub1, user);
+            commentBean.create("Thanks for the Blender tips!", pub1, publisher2);
+
+            commentBean.create("AI concepts explained clearly.", pub2, user);
+            commentBean.create("Looking forward to more AI tutorials.", pub2, publisher1);
+
         } catch (Exception e) {
             System.err.println("Startup user already exists or failed: " + e.getMessage());
         }

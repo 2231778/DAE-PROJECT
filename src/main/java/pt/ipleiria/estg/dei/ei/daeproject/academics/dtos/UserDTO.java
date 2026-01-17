@@ -7,6 +7,7 @@ import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Colaborador;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Responsavel;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,10 +18,11 @@ public class UserDTO {
     private String profilePicture;
     private Status status;
     private String role;
+    private List<CommentDTO> comments;
     //TODO: SEE IF I PUT PUBLICATION OF USERS HERE
 
     public UserDTO() {
-
+        this.comments = new ArrayList<CommentDTO>();
     }
 
     public UserDTO(Integer id, String name, String email, String profilePicture, Status status, String role) {
@@ -30,6 +32,7 @@ public class UserDTO {
         this.profilePicture = profilePicture;
         this.status = status;
         this.role = role;
+        this.comments = new ArrayList<CommentDTO>();
     }
 
     public static UserDTO from(User user) {
@@ -39,7 +42,7 @@ public class UserDTO {
         else if (user instanceof Responsavel) role = "RESPONSAVEL";
         else role = "USER";
 
-        return new UserDTO(
+        UserDTO dto = new UserDTO(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
@@ -47,6 +50,13 @@ public class UserDTO {
                 user.getStatus(),
                 role
         );
+        if (Hibernate.isInitialized(user.getComments())) {
+            dto.comments = user.getComments()
+                    .stream()
+                    .map(CommentDTO::from)
+                    .collect(Collectors.toList());
+        }
+        return dto;
     }
 
     public static List<UserDTO> from(List<User> users) {

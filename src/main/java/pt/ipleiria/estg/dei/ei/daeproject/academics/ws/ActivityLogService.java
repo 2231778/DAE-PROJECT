@@ -15,7 +15,7 @@ import pt.ipleiria.estg.dei.ei.daeproject.academics.security.Authenticated;
 
 import java.util.List;
 
-@Path("/ActiviLog")
+@Path("/activity-log")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
 //@Authenticated

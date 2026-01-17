@@ -1,8 +1,10 @@
 package pt.ipleiria.estg.dei.ei.daeproject.academics.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +21,7 @@ public class Comment {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Integer id;
     private String content;
-    private Boolean visibility;
+    private Visibility visibility;
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
     @Column(name = "updated_at", nullable = false)
@@ -27,14 +29,17 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     private Publication publication;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @NotNull
+    @JsonIgnoreProperties({"comments"}) // ignore the back-reference
     private User author;
 
-    public Comment() {}
-    public Comment(String content, Boolean visibility, Publication publication, User author){
+    public Comment() {
+        this.visibility = Visibility.VISIBLE;
+    }
+    public Comment(String content, Publication publication, User author){
         this.content = content;
-        this.visibility = true;
+        this.visibility = Visibility.VISIBLE;
         this.publication = publication;
         this.author = author;
     }
@@ -62,11 +67,11 @@ public class Comment {
         this.content = content;
     }
 
-    public Boolean getVisibility() {
+    public Visibility getVisibility() {
         return visibility;
     }
 
-    public void setVisibility(Boolean visibility) {
+    public void setVisibility(Visibility visibility) {
         this.visibility = visibility;
     }
 

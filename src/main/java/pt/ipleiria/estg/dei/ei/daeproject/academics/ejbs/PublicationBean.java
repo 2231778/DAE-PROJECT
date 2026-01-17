@@ -4,8 +4,10 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.ws.rs.core.Response;
+import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Status;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Comment;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Publication;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.User;
 
@@ -29,6 +31,15 @@ public class PublicationBean {
     }
     public List<Publication> findAll(){
         return entityManager.createNamedQuery("getAllPublications", Publication.class).getResultList();
+    }
+
+    public List<Comment> findAllComments(Integer id){
+        Publication publication = find(id);
+        if (publication == null) {
+            return null;
+        }
+        Hibernate.initialize(publication.getComments());
+        return publication.getComments();
     }
 
     public void remove(int id){

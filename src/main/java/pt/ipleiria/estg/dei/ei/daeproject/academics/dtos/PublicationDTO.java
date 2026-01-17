@@ -27,12 +27,13 @@ public class PublicationDTO {
 
     //private List<TagDTO> tags;
 
-    //private List<CommentDTO> tags;
+    private List<CommentDTO> comments;
     //private List<RattingDTO> tags;
     private List<ActivityLogDTO> activityLogs;
 
     public PublicationDTO() {
         this.activityLogs = new ArrayList<ActivityLogDTO>();
+        this.comments = new ArrayList<CommentDTO>();
     }
 
     public PublicationDTO(Integer id,String title, String description, String file, Visibility visibility, LocalDateTime creationDate, LocalDateTime    updatedDate, String aiGeneratedSummary, UserDTO publisher, String author){
@@ -47,6 +48,7 @@ public class PublicationDTO {
             this.publisher = publisher;
             this.author = author;
             this.activityLogs = new ArrayList<ActivityLogDTO>();
+            this.comments = new ArrayList<CommentDTO>();
     }
 
     public static PublicationDTO from(Publication publication) {
@@ -70,6 +72,14 @@ public class PublicationDTO {
                     .map(ActivityLogDTO::from)
                     .collect(Collectors.toList());
         }
+
+        if (Hibernate.isInitialized(publication.getComments())) {
+            dto.comments = publication.getComments()
+                    .stream()
+                    .map(CommentDTO::from)
+                    .collect(Collectors.toList());
+        }
+
 
         return dto;
     }
@@ -169,5 +179,13 @@ public class PublicationDTO {
 
     public void setUpdatedDate(LocalDateTime updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public List<CommentDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDTO> comments) {
+        this.comments = comments;
     }
 }
