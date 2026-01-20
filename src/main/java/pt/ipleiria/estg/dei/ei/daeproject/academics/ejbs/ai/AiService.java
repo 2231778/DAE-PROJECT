@@ -14,8 +14,8 @@ public class AiService {
     // The endpoint of your local AI container
     private static final String OLLAMA_API_URL = "http://host.docker.internal:11434/api/generate";
 
-    // You could make the model name configurable
-    private static final String AI_MODEL = "llama3"; // Or "mistral", "gemma", etc.
+
+    private static final String AI_MODEL = "llama3";
 
     /**
      * Generates a summary for a given text.
@@ -49,8 +49,6 @@ public class AiService {
                 String jsonResponse = response.readEntity(String.class);
 
                 // The actual summary is inside a "response" field in the JSON.
-                // You should use a proper JSON parsing library (like Jakarta JSON Binding or Gson)
-                // for robustness, but for a quick example, we can parse it manually.
                 return parseResponse(jsonResponse);
             } else {
                 // Handle errors
@@ -60,7 +58,7 @@ public class AiService {
             }
 
         } finally {
-            // 6. Always close the client
+            // 6. close the client
             client.close();
         }
     }
@@ -72,7 +70,6 @@ public class AiService {
 
     // Helper to extract the summary from the JSON response
     private String parseResponse(String jsonResponse) {
-        // A very basic parser. A real JSON library is much better.
         // Example response: {"model":"llama3", "created_at":"...", "response":"This is the summary...", ...}
         if (jsonResponse.contains("\"response\":\"")) {
             int start = jsonResponse.indexOf("\"response\":\"") + 12;
