@@ -7,10 +7,7 @@ import jakarta.ws.rs.core.Response;
 import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Status;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Comment;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Publication;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Rating;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.User;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.*;
 
 import java.util.List;
 
@@ -93,6 +90,45 @@ public class PublicationBean {
         return total / ratings.size();
     }
 
+    // ------------------------- Tags ----------------
+    public Publication subscribeTag(Integer publicationId, Integer tagId){
+        Publication publication = find(publicationId);
+        if (publication == null) throw new IllegalArgumentException("Publication not found");
+        Tag tag = entityManager.find(Tag.class, tagId);
+        if (tag == null) throw new IllegalArgumentException("Tag not found");
 
+        // Add the tag to the user if not already present
+        if (!publication.getTags().contains(tag)) {
+            publication.getTags().add(tag);
+        }
 
+        // Add the user to the tag as well to maintain both sides
+        if (!tag.getPublications().contains(publication)) {
+            tag.getPublications().add(publication);
+        }
+
+        //Persist changes
+        entityManager.merge(publication);
+        entityManager.merge(tag);
+
+        return publication;
+
+    }
+
+    public Publication unsubscribeTag(Integer publicationId, Integer tagId) {
+        Publication publication = find(publicationId);
+        if (publication == null) throw new IllegalArgumentException("Publication not found");
+        Tag tag = entityManager.find(Tag.class, tagId);
+        if (tag == null) throw new IllegalArgumentException("Tag not found");
+
+        // Remove association if present
+        publication.getTags().remove(tag);
+        tag.getPublications().remove(publication);
+
+        entityManager.merge(tag);
+        entityManager.merge(publication);
+
+        return publication;
+
+    }
 }

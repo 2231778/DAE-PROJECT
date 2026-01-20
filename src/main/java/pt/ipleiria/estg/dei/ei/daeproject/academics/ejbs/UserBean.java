@@ -3,6 +3,7 @@ package pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.RoleType;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Status;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.ActivityLogDTO;
@@ -135,6 +136,48 @@ public class UserBean {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public User subscribeTag(Integer userId, Integer tagId) {
+        Tag tag = entityManager.find(Tag.class, tagId);
+        if (tag == null) throw new IllegalArgumentException("Tag not found");
+
+        User user = entityManager.find(User.class, userId);
+        if (user == null) throw new IllegalArgumentException("User not found");
+
+        // Add the tag to the user if not already present
+        if (!user.getTags().contains(tag)) {
+            user.getTags().add(tag);
+        }
+
+        // Add the user to the tag as well to maintain both sides
+        if (!tag.getUsers().contains(user)) {
+            tag.getUsers().add(user);
+        }
+
+        // Persist changes
+        entityManager.merge(user);
+        entityManager.merge(tag);
+
+        return user;
+    }
+
+    public User unsubscribeTag(Integer userId, Integer tagId) {
+        Tag tag = entityManager.find(Tag.class, tagId);
+        if (tag == null) throw new IllegalArgumentException("Tag not found");
+
+        User user = entityManager.find(User.class, userId);
+        if (user == null) throw new IllegalArgumentException("User not found");
+
+        // Remove association if present
+        user.getTags().remove(tag);
+        tag.getUsers().remove(user);
+
+        // Persist the changes
+        entityManager.merge(user);
+        entityManager.merge(tag);
+
+        return user;
     }
 
 

@@ -8,10 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.RoleType;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.ActivityLogDTO;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.PasswordDTO;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.UserCreateDTO;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.UserDTO;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.*;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs.UserBean;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.ActivityLog;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.User;
@@ -192,5 +189,36 @@ public class UserService {
         }
 
         return Response.ok(dto).build();
+    }
+
+    @POST
+    @Path("/subscriptions")
+    public Response addSubscription(@Context SecurityContext securityContext, TagDTO tagDTO) {
+        // Get the current authenticated user's ID from the SecurityContext
+        Integer userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
+
+        try{
+            User user = userBean.subscribeTag(userId,tagDTO.getId());
+            List<TagDTO> dto = TagDTO.from(user.getTags());
+            return Response.ok(dto).build();
+        }
+        catch(Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DELETE
+    @Path("/subscriptions")
+    public Response deleteSubscription(@Context SecurityContext securityContext, TagDTO tagDTO) {
+        Integer userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
+        try{
+            User user = userBean.unsubscribeTag(userId,tagDTO.getId());
+            List<TagDTO> dto = TagDTO.from(user.getTags());
+            return Response.ok(dto).build();
+        }
+        catch(Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+
     }
 }

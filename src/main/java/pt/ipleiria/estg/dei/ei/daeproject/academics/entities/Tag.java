@@ -16,19 +16,19 @@ import java.util.List;
 @Table(name = "tags")
 public class Tag {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private String description;
     private Visibility visibility;
     @ManyToMany(mappedBy = "tags")
-    private List<Subscription> subscriptions;
-    @ManyToMany(mappedBy = "tags")
     private List<Publication> publications;
+    @ManyToMany(mappedBy = "tags")
+    private List<User> users;
 
     public Tag() {
-        this.subscriptions = new ArrayList<Subscription>();
         this.publications = new ArrayList<Publication>();
+        this.users = new ArrayList<User>();
         this.visibility = Visibility.VISIBLE;
     }
 
@@ -36,6 +36,8 @@ public class Tag {
         this.name = name;
         this.description = description;
         this.visibility = Visibility.VISIBLE;
+        this.publications = new ArrayList<Publication>();
+        this.users = new ArrayList<User>();
     }
 
     public Integer getId() {
@@ -74,11 +76,11 @@ public class Tag {
         this.publications = publications;
     }
 
-    public List<Subscription> getSubscriptions() {
-        return subscriptions;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setSubscriptions(List<Subscription> subscriptions) {
-        this.subscriptions = subscriptions;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }

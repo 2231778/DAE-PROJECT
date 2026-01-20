@@ -10,10 +10,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.CommentDTO;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.PublicationDTO;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.RatingDTO;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.UserDTO;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.*;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs.CommentBean;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs.PublicationBean;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs.RatingBean;
@@ -320,6 +317,38 @@ public class PublicationService {
 
         ratingBean.delete(id,userId);
         return Response.noContent().build();
+    }
+
+    // ------------------------------  Tags ----------------
+    @POST
+    @Path("/subscriptions")
+    public Response addSubscription(@Context SecurityContext securityContext, TagDTO tagDTO) {
+        // Get the current authenticated user's ID from the SecurityContext
+        Integer userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
+
+        try{
+            Publication publication = publicationBean.subscribeTag(userId,tagDTO.getId());
+            List<TagDTO> dto = TagDTO.from(publication.getTags());
+            return Response.ok(dto).build();
+        }
+        catch(Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DELETE
+    @Path("/subscriptions")
+    public Response deleteSubscription(@Context SecurityContext securityContext, TagDTO tagDTO) {
+        Integer userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
+        try{
+            Publication publication = publicationBean.unsubscribeTag(userId,tagDTO.getId());
+            List<TagDTO> dto = TagDTO.from(publication.getTags());
+            return Response.ok(dto).build();
+        }
+        catch(Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+
     }
 
 
