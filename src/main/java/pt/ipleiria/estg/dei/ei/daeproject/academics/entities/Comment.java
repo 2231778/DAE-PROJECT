@@ -21,6 +21,8 @@ public class Comment {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Integer id;
     private String content;
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private Visibility visibility;
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

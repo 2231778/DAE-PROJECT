@@ -41,22 +41,39 @@ public class PublicationService {
     @GET
     @Path("/")
     public List<PublicationDTO> getAllPublications() {
-        return PublicationDTO.from(publicationBean.findAll());
+        return publicationBean.findAllPublicationDTOs();
     }
 
     @GET
     @Path("/{id}")
     public Response getPublicationById(@PathParam("id") Integer id) {
-        Publication publication = publicationBean.find(id);
+        PublicationDTO publicationDTO = publicationBean.findPublicationDTO(id);
 
-        if (publication == null) {
+        if (publicationDTO == null) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("Publication not found")
                     .build();
         }
-        PublicationDTO dto = PublicationDTO.from(publication);
-        return Response.ok(dto).build();
+
+        return Response.ok(publicationDTO).build();
     }
+
+    @GET
+    @Path("/my-publications")
+    public Response getMyPublications(@Context SecurityContext securityContext) {
+        Integer userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
+
+        try{
+            List<Publication> publications = publicationBean.findMyPublications(userId);
+            List<PublicationDTO> dtos = PublicationDTO.from(publications);
+            return Response.ok(dtos).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Failed to fetch publications: " + e.getMessage())
+                    .build();
+        }
+    }
+
 
 
     //TODO: MAKE THE FILE UPLOAD
@@ -131,7 +148,8 @@ public class PublicationService {
 
     @PATCH
     @Path("/{id}/visibility")
-    public Response updateUserStatus(@PathParam("id") Integer id) {
+    @RolesAllowed({"ADMIN","RESPONSAVEL"})
+    public Response updatePublicationVisibility(@PathParam("id") Integer id) {
         try {
             publicationBean.toggleVisibility(id);
             var updatedPublication = publicationBean.find(id);
@@ -338,6 +356,7 @@ public class PublicationService {
 
     @DELETE
     @Path("/subscriptions")
+    @RolesAllowed({"ADMIN","RESPONSAVEL"})
     public Response deleteSubscription(@Context SecurityContext securityContext, TagDTO tagDTO) {
         Integer userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
         try{

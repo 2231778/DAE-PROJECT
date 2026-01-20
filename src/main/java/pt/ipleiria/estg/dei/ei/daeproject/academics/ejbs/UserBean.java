@@ -1,9 +1,11 @@
 package pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs;
 
+import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.ActionType;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.RoleType;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Status;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.ActivityLogDTO;
@@ -18,6 +20,8 @@ public class UserBean {
 
     @PersistenceContext
     private EntityManager entityManager;
+    @EJB
+    private ActivityLogBean activityLogBean;
 
     public void create(String name, String password, String email,
                        String profilePicture, RoleType role) {
@@ -40,7 +44,10 @@ public class UserBean {
             default:
                 throw new IllegalArgumentException("Invalid role");
         }
+
         entityManager.persist(user);
+        // Log
+        activityLogBean.create(ActionType.CREATE,"User Creation",user);
     }
 
     // rOLE is always updated here !!
@@ -57,6 +64,8 @@ public class UserBean {
         //TODO: FAZER UPLOAD DA IMAGEM
 
         entityManager.merge(user); // merge changes for normal fields
+        //Log
+        activityLogBean.create(ActionType.UPDATE,"User Updated",user);
 
         // Update role (discriminator column) if provided
         if (role != null) {
@@ -80,6 +89,10 @@ public class UserBean {
 
         user.setEmail(email);
         entityManager.merge(user);
+
+        //Log
+        activityLogBean.create(ActionType.UPDATE,"User Email Updated",user);
+
     }
 
     public void updatePassword(Integer id, String newPassword){
@@ -88,6 +101,9 @@ public class UserBean {
 
         user.setPassword(Hasher.hash(newPassword));
         entityManager.merge(user);
+
+        //Log
+        activityLogBean.create(ActionType.UPDATE,"User Password Updated",user);
     }
 
     //TODO:  Recover Password via e-mail.
@@ -103,6 +119,9 @@ public class UserBean {
         }
 
         entityManager.merge(user);
+
+        //Log
+        activityLogBean.create(ActionType.UPDATE,"User Status Updated",user);
     }
 
 
@@ -159,6 +178,8 @@ public class UserBean {
         entityManager.merge(user);
         entityManager.merge(tag);
 
+        //Maybe put Log here
+
         return user;
     }
 
@@ -176,6 +197,8 @@ public class UserBean {
         // Persist the changes
         entityManager.merge(user);
         entityManager.merge(tag);
+
+        //Maybe put Log here
 
         return user;
     }

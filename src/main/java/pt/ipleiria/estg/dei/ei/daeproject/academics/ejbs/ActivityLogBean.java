@@ -20,9 +20,15 @@ public class ActivityLogBean {
         entityManager.persist(activityLog);
         return activityLog;
     }
+    public ActivityLog create(ActionType action, String details, User user) {
+        return create(action, details, user, null);
+    }
 
-    public ActivityLog find(Integer id){
-        return entityManager.find(ActivityLog.class, id);
+    public List<ActivityLog> findUserActivity(Integer id){
+        return entityManager
+                .createNamedQuery("getUserActivity", ActivityLog.class)
+                .setParameter("userId", id)
+                .getResultList();
     }
 
     public List<ActivityLog> findAll(){

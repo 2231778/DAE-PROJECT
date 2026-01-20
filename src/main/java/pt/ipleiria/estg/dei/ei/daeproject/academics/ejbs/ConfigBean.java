@@ -7,6 +7,7 @@ import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.ActionType;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.RoleType;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Publication;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Rating;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Tag;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.User;
 
 
@@ -73,7 +74,7 @@ public class ConfigBean {
             activityLogBean.create(ActionType.CREATE, "Created publication 1", publisher1, pub1);
             activityLogBean.create(ActionType.CREATE, "Created publication 2", publisher2, pub2);
             activityLogBean.create(ActionType.UPDATE, "Updated publication 1", publisher1, pub1);
-            activityLogBean.create(ActionType.DELETE, "Deleted a comment on publication 2", publisher2, pub2);
+            activityLogBean.create(ActionType.DELETE, "Deleted a comment on publication 2", publisher2);
 
 
             activityLogBean.create(ActionType.CREATE, "Created publication 1", user, pub1);
@@ -90,10 +91,22 @@ public class ConfigBean {
             commentBean.create("Looking forward to more AI tutorials.", pub2, publisher1);
 
             // --- Tags ---
-            tagBean.create("3D Modeling", "All publications related to 3D modeling.");
-            tagBean.create("Artificial Intelligence", "Publications about AI concepts and applications.");
-            tagBean.create("Java", "Publications on Java programming, patterns, and best practices.");
-            tagBean.create("Data Structures", "Posts about algorithms, data structures, and problem-solving.");
+            Tag tag3D = tagBean.create("3D Modeling", "All publications related to 3D modeling.");
+            Tag tagAI = tagBean.create("Artificial Intelligence", "Publications about AI concepts and applications.");
+            Tag tagJava = tagBean.create("Java", "Publications on Java programming, patterns, and best practices.");
+            Tag tagDS = tagBean.create("Data Structures", "Posts about algorithms, data structures, and problem-solving.");
+
+            publicationBean.subscribeTag(pub1.getId(), tag3D.getId());
+            publicationBean.subscribeTag(pub2.getId(), tagAI.getId());
+            publicationBean.subscribeTag(pub2.getId(), tagJava.getId());
+
+            userBean.subscribeTag(user.getId(), tagAI.getId());
+            userBean.subscribeTag(user.getId(), tag3D.getId());
+
+            userBean.subscribeTag(publisher1.getId(), tagJava.getId());
+            userBean.subscribeTag(publisher2.getId(), tagDS.getId());
+
+
 
             // --- Ratings ---
             // user rates pub1 and pub2

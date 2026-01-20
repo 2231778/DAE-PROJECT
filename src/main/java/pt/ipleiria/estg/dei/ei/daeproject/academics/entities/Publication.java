@@ -3,7 +3,9 @@ package pt.ipleiria.estg.dei.ei.daeproject.academics.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.Formula;
 import org.w3c.dom.Text;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Status;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
@@ -18,7 +20,11 @@ import java.util.concurrent.CompletionException;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllPublications",
-                query = "SELECT p FROM Publication p ORDER BY p.title" // JPQL
+                query = "SELECT p FROM Publication p WHERE p.visibility = :visibility ORDER BY p.title"
+        ),
+        @NamedQuery(
+                name = "getMyPublications",
+                query = "SELECT p FROM Publication p WHERE p.publisher.id = :userId"
         )
 })
 @Table(name = "publications")

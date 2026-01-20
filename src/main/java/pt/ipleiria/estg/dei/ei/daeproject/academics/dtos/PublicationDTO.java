@@ -25,15 +25,17 @@ public class PublicationDTO {
     private UserDTO publisher;   // lightweight user
     private String author;
 
-    //private List<TagDTO> tags;
-
     private List<CommentDTO> comments;
-    //private List<RattingDTO> tags;
+    private List<TagDTO> tags;
     private List<ActivityLogDTO> activityLogs;
+    private Integer numberOfComments;
+    private Double rating;
+    private Integer numberOfReviews;
 
     public PublicationDTO() {
         this.activityLogs = new ArrayList<ActivityLogDTO>();
         this.comments = new ArrayList<CommentDTO>();
+        this.tags = new ArrayList<TagDTO>();
     }
 
     public PublicationDTO(Integer id,String title, String description, String file, Visibility visibility, LocalDateTime creationDate, LocalDateTime    updatedDate, String aiGeneratedSummary, UserDTO publisher, String author){
@@ -49,9 +51,14 @@ public class PublicationDTO {
             this.author = author;
             this.activityLogs = new ArrayList<ActivityLogDTO>();
             this.comments = new ArrayList<CommentDTO>();
+            this.tags = new ArrayList<TagDTO>();
+
     }
 
     public static PublicationDTO from(Publication publication) {
+        if (publication == null) {
+            return null;
+        }
         PublicationDTO dto = new  PublicationDTO(
                 publication.getId(),
                 publication.getTitle(),
@@ -66,20 +73,25 @@ public class PublicationDTO {
 
         );
 
-        if (Hibernate.isInitialized(publication.getPublicationActivityLogs())) {
-            dto.activityLogs = publication.getPublicationActivityLogs()
-                    .stream()
-                    .map(ActivityLogDTO::from)
-                    .collect(Collectors.toList());
+        if (Hibernate.isInitialized(publication.getPublicationActivityLogs())&& !publication.getPublicationActivityLogs().isEmpty()) {
+            dto.activityLogs = ActivityLogDTO.from(publication.getPublicationActivityLogs());
         }
 
         if (Hibernate.isInitialized(publication.getComments())) {
-            dto.comments = publication.getComments()
-                    .stream()
-                    .map(CommentDTO::from)
-                    .collect(Collectors.toList());
+            dto.comments = CommentDTO.from(publication.getComments());
+            dto.setNumberOfComments(publication.getComments().size());
+        }
+        if (Hibernate.isInitialized(publication.getTags())) {
+            dto.tags = TagDTO.from(publication.getTags());
         }
 
+        if (Hibernate.isInitialized(publication.getRatings()) && !publication.getRatings().isEmpty()) {
+            dto.setRating(publication.getRatings().stream().mapToDouble(r -> r.getValue()).average().orElse(0.0));
+            dto.setNumberOfReviews(publication.getRatings().size());
+        } else {
+            dto.setRating(0.0);        // default 0
+            dto.setNumberOfReviews(0); // default 0
+        }
 
         return dto;
     }
@@ -187,5 +199,37 @@ public class PublicationDTO {
 
     public void setComments(List<CommentDTO> comments) {
         this.comments = comments;
+    }
+
+    public List<TagDTO> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<TagDTO> tags) {
+        this.tags = tags;
+    }
+
+    public Integer getNumberOfComments() {
+        return numberOfComments;
+    }
+
+    public void setNumberOfComments(Integer numberOfComments) {
+        this.numberOfComments = numberOfComments;
+    }
+
+
+    public Integer getNumberOfReviews() {
+        return numberOfReviews;
+    }
+
+    public void setNumberOfReviews(Integer numberOfReviews) {
+        this.numberOfReviews = numberOfReviews;
+    }
+
+    public Double getRating(){
+        return this.rating;
+    }
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 }

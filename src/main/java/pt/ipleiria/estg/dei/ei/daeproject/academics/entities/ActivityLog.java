@@ -29,9 +29,9 @@ public class ActivityLog {
     private String details;
     @Column(name = "timestamp", nullable = false, updatable = false)
     private LocalDateTime timestamp;
-    @ManyToOne()
+    @ManyToOne(optional = true)
     private User user;
-    @ManyToOne()
+    @ManyToOne(optional = true)
     private Publication publication;
 
     public ActivityLog() {}

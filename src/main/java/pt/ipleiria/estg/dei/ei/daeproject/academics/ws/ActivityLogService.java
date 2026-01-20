@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.daeproject.academics.ws;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
@@ -18,7 +19,7 @@ import java.util.List;
 @Path("/activity-log")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
-//@Authenticated
+@Authenticated
 public class ActivityLogService {
     @EJB
     private ActivityLogBean activityLogBean;
@@ -33,6 +34,13 @@ public class ActivityLogService {
     @Path("/")
     public List<ActivityLogDTO> getActivityLogs() {
         return ActivityLogDTO.from(activityLogBean.findAll());
+    }
+
+    @GET
+    @Path("/user/{id}")
+    @RolesAllowed({"ADMIN"})
+    public List<ActivityLogDTO> getActivityLogOfUser(@PathParam("id") int id) {
+        return ActivityLogDTO.from(activityLogBean.findUserActivity(id));
     }
 
     @POST

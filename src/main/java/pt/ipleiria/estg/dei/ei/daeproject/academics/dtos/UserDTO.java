@@ -36,6 +36,9 @@ public class UserDTO {
     }
 
     public static UserDTO from(User user) {
+        if (user == null) {
+            return null;
+        }
         String role;
         if (user instanceof Administrador) role = "ADMIN";
         else if (user instanceof Colaborador) role = "COLABORADOR";

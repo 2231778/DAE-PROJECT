@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.daeproject.academics.ws;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -40,6 +41,7 @@ public class TagService {
 
     @POST
     @Path("/")
+    @RolesAllowed({"ADMIN","RESPONSAVEL"})
     public Response addTag(TagDTO tagDTO) {
         try {
             Tag tag = tagBean.create(tagDTO.getName(), tagDTO.getDescription());
@@ -55,6 +57,7 @@ public class TagService {
 
     @PATCH
     @Path("/{id}")
+    @RolesAllowed({"ADMIN","RESPONSAVEL"})
     public Response updateTag(@PathParam("id") Integer id, TagDTO tagDTO) {
         try {
             Tag updatedTag = tagBean.update(id, tagDTO.getName(), tagDTO.getDescription());
@@ -72,6 +75,7 @@ public class TagService {
 
     @PATCH
     @Path("{id}/visibility")
+    @RolesAllowed({"ADMIN","RESPONSAVEL"})
     public Response updateVisibility( @PathParam("id") Integer id) {
         try {
             tagBean.toggleVisibility(id);
@@ -91,6 +95,7 @@ public class TagService {
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed({"ADMIN","RESPONSAVEL"})
     public Response deleteTagById(@PathParam("id") Integer id) {
         try {
             tagBean.delete(id);

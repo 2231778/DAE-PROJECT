@@ -7,6 +7,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.ws.rs.core.Response;
 import org.hibernate.Hibernate;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.ActionType;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.CommentDTO;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Comment;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Publication;
@@ -22,6 +23,8 @@ public class CommentBean {
     private PublicationBean publicationBean;
     @EJB
     private UserBean userBean;
+    @EJB
+    private ActivityLogBean activityLogBean;
 
     public Comment create(String content, Publication publication, User author) {
         //Create the comment
@@ -32,6 +35,9 @@ public class CommentBean {
         author.getComments().add(comment);
 
         entityManager.persist(comment);
+
+        //Log
+        activityLogBean.create(ActionType.CREATE,"USER CREATED A COMMENT",author);
 
         return comment;
     }
@@ -53,6 +59,9 @@ public class CommentBean {
         author.getComments().add(comment);
 
         entityManager.persist(comment);
+
+        //Log
+        activityLogBean.create(ActionType.CREATE,"USER CREATED A COMMENT",author);
 
         Hibernate.initialize(publication.getComments());
         Hibernate.initialize(author.getComments());
@@ -79,6 +88,9 @@ public class CommentBean {
 
         entityManager.merge(comment); // Think is redundant
 
+        //Log
+        activityLogBean.create(ActionType.CREATE,"USER UPDATED A COMMENT",comment.getAuthor());
+
         Hibernate.initialize(comment.getPublication());
 
         return CommentDTO.from(comment);
@@ -95,6 +107,9 @@ public class CommentBean {
         comment.getAuthor().getComments().remove(comment);
 
         entityManager.remove(comment);
+
+        //Log
+        activityLogBean.create(ActionType.DELETE,"USER DELETED A COMMENT",comment.getAuthor());
     }
 
 

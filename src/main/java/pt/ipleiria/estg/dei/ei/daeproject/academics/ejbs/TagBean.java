@@ -1,8 +1,10 @@
 package pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs;
 
+import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.ActionType;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Tag;
 
@@ -13,6 +15,8 @@ import java.util.NoSuchElementException;
 public class TagBean {
     @PersistenceContext
     private EntityManager entityManager;
+    @EJB
+    private ActivityLogBean activityLogBean;
 
     public List<Tag> findAll() {
         return entityManager
@@ -23,6 +27,10 @@ public class TagBean {
     public Tag create(String name,String description) {
         Tag tag = new Tag(name,description);
         entityManager.persist(tag);
+
+        //Log
+        activityLogBean.create(ActionType.CREATE,"TAG CREATED",null,null);
+
         return tag;
     }
 
@@ -33,6 +41,11 @@ public class TagBean {
         }
         tag.setName(name);
         tag.setDescription(description);
+        entityManager.merge(tag);
+
+        //Log
+        activityLogBean.create(ActionType.CREATE,"TAG UPDATED",null,null);
+
         return tag;
     }
 
@@ -44,6 +57,10 @@ public class TagBean {
         }
 
         entityManager.remove(tag);
+
+        //Log
+        activityLogBean.create(ActionType.DELETE,"TAG DELETED",null,null);
+
     }
 
     public void toggleVisibility(Integer id) {
@@ -57,6 +74,10 @@ public class TagBean {
         }
 
         entityManager.merge(tag);
+        //LOG
+        activityLogBean.create(ActionType.UPDATE,"TAG VISIBILITY UPDATED",null,null);
+
+
     }
 
 }

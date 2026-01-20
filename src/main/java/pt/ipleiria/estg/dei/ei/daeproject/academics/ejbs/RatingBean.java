@@ -7,6 +7,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.hibernate.Hibernate;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.ActionType;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Publication;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Rating;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.User;
@@ -21,7 +22,8 @@ public class RatingBean {
     private UserBean userBean;
     @EJB
     private PublicationBean publicationBean;
-
+    @EJB
+    private ActivityLogBean activityLogBean;
 
 
     public Rating create(Integer value, Integer publicationId, Integer userId) {
@@ -47,6 +49,9 @@ public class RatingBean {
 
         entityManager.persist(rating);
 
+        //Log
+        activityLogBean.create(ActionType.CREATE,"PUBLICATION RATED",user,publication);
+
         Hibernate.initialize(user.getRatings());
         Hibernate.initialize(user.getRatings());
 
@@ -69,6 +74,12 @@ public class RatingBean {
             }
 
             rating.setValue(value);
+            entityManager.merge(rating);
+
+            //Log
+            activityLogBean.create(ActionType.UPDATE,"PUBLICATION RE-RATED",rating.getUser(),rating.getPublication());
+
+
             return rating;
         } catch (NoResultException e) {
             throw new EntityNotFoundException("Rating not found for publication " + publicationId + " and user " + userId);
@@ -90,6 +101,10 @@ public class RatingBean {
         }
 
         entityManager.remove(rating);
+
+        //Log
+        activityLogBean.create(ActionType.DELETE,"PUBLICATION RATING REMOVED",rating.getUser(),null);
+
     }
 
 
