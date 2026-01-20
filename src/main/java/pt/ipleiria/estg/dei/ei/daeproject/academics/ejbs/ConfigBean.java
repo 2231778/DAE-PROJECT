@@ -6,6 +6,7 @@ import jakarta.ejb.Startup;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.ActionType;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.RoleType;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Publication;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Rating;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.User;
 
 
@@ -25,6 +26,9 @@ public class ConfigBean {
     private CommentBean commentBean;
     @EJB
     private TagBean tagBean;
+
+    @EJB
+    private RatingBean ratingBean;
 
     @PostConstruct
     public void populateDB() {
@@ -90,6 +94,19 @@ public class ConfigBean {
             tagBean.create("Artificial Intelligence", "Publications about AI concepts and applications.");
             tagBean.create("Java", "Publications on Java programming, patterns, and best practices.");
             tagBean.create("Data Structures", "Posts about algorithms, data structures, and problem-solving.");
+
+            // --- Ratings ---
+            // user rates pub1 and pub2
+            ratingBean.create(5, pub1.getId(), user.getId());
+            ratingBean.create(4, pub2.getId(), user.getId());
+
+            // publisher1 rates pub1 and pub2
+            ratingBean.create(4, pub1.getId(), publisher1.getId());
+            ratingBean.create(5, pub2.getId(), publisher1.getId());
+
+            // publisher2 rates pub1 and pub2
+            ratingBean.create(3, pub1.getId(), publisher2.getId());
+            ratingBean.create(4, pub2.getId(), publisher2.getId());
 
         } catch (Exception e) {
             System.err.println("Startup user already exists or failed: " + e.getMessage());

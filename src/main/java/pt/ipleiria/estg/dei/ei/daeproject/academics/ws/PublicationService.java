@@ -12,12 +12,15 @@ import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.CommentDTO;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.PublicationDTO;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.RatingDTO;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.UserDTO;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs.CommentBean;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs.PublicationBean;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs.RatingBean;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs.UserBean;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Comment;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Publication;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Rating;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.User;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.security.Authenticated;
 
@@ -35,6 +38,8 @@ public class PublicationService {
     private UserBean userBean;
     @EJB
     private CommentBean commentBean;
+    @EJB
+    private RatingBean ratingBean;
 
     @GET
     @Path("/")
@@ -57,8 +62,6 @@ public class PublicationService {
     }
 
 
-
-
     //TODO: MAKE THE FILE UPLOAD
     @POST
     @Path("/")
@@ -71,7 +74,6 @@ public class PublicationService {
                         .entity("Publisher not found")
                         .build();
             }
-
 
 
             Publication newPublication = publicationBean.create(
@@ -172,7 +174,7 @@ public class PublicationService {
     }
 
     @POST
-    @Path("/{id}")
+    @Path("/{id}/comments")
     public Response createComment(@PathParam("id") Integer id, @Context SecurityContext securityContext, CommentDTO commentDTO) {
 
         Integer userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
@@ -194,6 +196,7 @@ public class PublicationService {
                     .build();
         }
     }
+
 
     @PATCH
     @Path("/{idPublication}/comments/{idComment}")
@@ -245,6 +248,78 @@ public class PublicationService {
         commentBean.delete(idComment);
 
         return Response.noContent().build(); // 204 is better for DELETE
+    }
+
+    //-------------- Ratings ---------------
+    @GET
+    @Path("/{id}/rating")
+    public Response getRating(@PathParam("id") Integer id) {
+        Double rating = publicationBean.findPublicationRating(id);
+        if (rating == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(Map.of("message", "Publication not found"))
+                    .build();
+        }
+
+        return Response.ok(Map.of(
+                //"publicationId", id,
+                "rating", Math.round(rating * 10) / 10.00 // 2 decimals
+        )).build();
+    }
+
+    @POST
+    @Path("/{id}/rating")
+    public Response ratePublication(@PathParam("id") Integer id, @Context SecurityContext securityContext, RatingDTO ratingDTO) {
+        Integer userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
+
+        try {
+            Rating rating = ratingBean.create(ratingDTO.getValue(), id, userId);
+            RatingDTO dto = RatingDTO.from(rating);
+            return Response.ok(dto).build();
+        } catch (EntityNotFoundException e) {
+            // Map the EntityNotFoundException to a 404 Not Found or 400 Bad Request
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            // Catch any other unexpected exceptions and log them
+            // Log.error("Unexpected error creating comment", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("An unexpected error occurred: " + e.getMessage())
+                    .build();
+        }
+    }
+
+    @PATCH
+    @Path("/{id}/rating")
+    public Response updateRating(@PathParam("id") Integer id, @Context SecurityContext securityContext, RatingDTO ratingDTO) {
+        Integer userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
+
+        try {
+            Rating updatedRating = ratingBean.update(ratingDTO.getValue(), id, userId);
+            RatingDTO dto = RatingDTO.from(updatedRating);
+            return Response.ok(dto).build();
+        } catch (EntityNotFoundException e) {
+            // Map the EntityNotFoundException to a 404 Not Found or 400 Bad Request
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            // Catch any other unexpected exceptions and log them
+            // Log.error("Unexpected error creating comment", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("An unexpected error occurred: " + e.getMessage())
+                    .build();
+        }
+    }
+
+    @DELETE
+    @Path("/{id}/rating")
+    public Response deleteRating(@PathParam("id") Integer id,@Context SecurityContext securityContext) {
+        Integer userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
+
+        ratingBean.delete(id,userId);
+        return Response.noContent().build();
     }
 
 

@@ -9,6 +9,7 @@ import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Status;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Comment;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Publication;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Rating;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.User;
 
 import java.util.List;
@@ -70,5 +71,28 @@ public class PublicationBean {
         entityManager.merge(publication);
     }
     //TODO: AI GENERATED TEXT
+
+    //----------------- Ratings ------------------
+    public Double findPublicationRating(Integer id){
+        Publication publication = find(id);
+        if (publication == null) {
+            return null;
+        }
+        Hibernate.initialize(publication.getRatings());
+        List<Rating> ratings = publication.getRatings();
+
+        if (ratings == null || ratings.isEmpty()) {
+            return 0.0;
+        }
+
+        double total = 0;
+        for (Rating rating : ratings) {
+            total += rating.getValue();
+        }
+
+        return total / ratings.size();
+    }
+
+
 
 }
