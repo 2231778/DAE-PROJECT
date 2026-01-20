@@ -2,18 +2,21 @@ package pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs;
 
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
+import org.jboss.ejb3.annotation.TransactionTimeout;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
-import jakarta.ws.rs.core.Response;
+
 import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.ActionType;
-import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Status;
+
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.PublicationDTO;
+
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.*;
 
 import java.util.List;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -22,6 +25,8 @@ public class PublicationBean {
     private EntityManager entityManager;
     @EJB
     private ActivityLogBean activityLogBean;
+    @EJB
+    private AiProcessorBean aiProcessorBean;
 
     public Publication create(String title, String description, String file, User publisher, String author) {
         Publication publication = new Publication(title, description, file, publisher, author);
@@ -151,7 +156,25 @@ public class PublicationBean {
         //Log
         activityLogBean.create(ActionType.UPDATE, "PUBLICATION VISIBILITY UPDATED", publication.getPublisher(), publication);
     }
+
     //TODO: AI GENERATED TEXT
+
+    @TransactionTimeout(value = 300, unit = TimeUnit.SECONDS) // 5 minute timeout
+    public Publication generateAiTextAndWait(Integer id) throws Exception {
+
+        System.out.println("Calling async processor and waiting for result...");
+
+        // 1. Call the background task
+        Future<Publication> futureResult = aiProcessorBean.generateAndReturnSummary(id);
+
+        // 2. Wait here for the result. This is where the time is spent.
+        Publication completedPublication = futureResult.get();
+
+        System.out.println("Async task complete. Merging final result.");
+
+
+        return entityManager.merge(completedPublication);
+    }
 
     //----------------- Ratings ------------------
     public Double findPublicationRating(Integer id) {

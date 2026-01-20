@@ -44,6 +44,7 @@ public class Publication {
     @Column(name = "updated_at", nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedAt;
+    @Lob
     private String ai_generated_summary;
     @ManyToOne()
     @NotNull

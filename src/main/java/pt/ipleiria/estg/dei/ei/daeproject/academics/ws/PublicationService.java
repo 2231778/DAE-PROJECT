@@ -23,6 +23,7 @@ import pt.ipleiria.estg.dei.ei.daeproject.academics.security.Authenticated;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 @Path("publications") // relative url web path for this service
 @Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
@@ -366,6 +367,23 @@ public class PublicationService {
         }
         catch(Exception e){
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+    }
+
+    @PATCH
+    @Path("/{id}/generate-ai-text")
+    public Response generateAIText(@PathParam("id") Integer id) {
+        try {
+
+            Publication publication = publicationBean.generateAiTextAndWait(id);
+            PublicationDTO dto = PublicationDTO.from(publication);
+            return Response.ok(dto).build();
+        } catch (Exception e) {
+
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error during AI generation: " + e.getMessage())
+                    .build();
         }
 
     }

@@ -23,6 +23,10 @@ services:
     networks:
       - mynet
     command: "serve"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_KEEP_ALIVE=-1 # Keep the model loaded indefinitely
 
   webserver:
     build: .
@@ -48,3 +52,6 @@ services:
 
 networks:
   mynet:
+
+volumes:
+  ollama_data:
