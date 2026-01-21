@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.ei.daeproject.academics.entities;
 
 import jakarta.persistence.*;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,25 +16,28 @@ import java.util.List;
 @Table(name = "tags")
 public class Tag {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private String description;
-    private Boolean visibility;
-    @ManyToMany(mappedBy = "tags")
-    private List<Subscription> subscriptions;
+    private Visibility visibility;
     @ManyToMany(mappedBy = "tags")
     private List<Publication> publications;
+    @ManyToMany(mappedBy = "tags")
+    private List<User> users;
 
     public Tag() {
-        this.subscriptions = new ArrayList<Subscription>();
         this.publications = new ArrayList<Publication>();
+        this.users = new ArrayList<User>();
+        this.visibility = Visibility.VISIBLE;
     }
 
-    public Tag(String name, String description, Boolean visibility) {
+    public Tag(String name, String description) {
         this.name = name;
         this.description = description;
-        this.visibility = true;
+        this.visibility = Visibility.VISIBLE;
+        this.publications = new ArrayList<Publication>();
+        this.users = new ArrayList<User>();
     }
 
     public Integer getId() {
@@ -56,11 +60,11 @@ public class Tag {
         this.description = description;
     }
 
-    public Boolean getVisibility() {
+    public Visibility getVisibility() {
         return visibility;
     }
 
-    public void setVisibility(Boolean visibility) {
+    public void setVisibility(Visibility visibility) {
         this.visibility = visibility;
     }
 
@@ -72,11 +76,11 @@ public class Tag {
         this.publications = publications;
     }
 
-    public List<Subscription> getSubscriptions() {
-        return subscriptions;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setSubscriptions(List<Subscription> subscriptions) {
-        this.subscriptions = subscriptions;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }

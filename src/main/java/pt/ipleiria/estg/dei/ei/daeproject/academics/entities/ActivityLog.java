@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.ei.daeproject.academics.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.ActionType;
 
 
@@ -10,7 +11,11 @@ import java.time.LocalDateTime;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllActivityLog",
-                query = "SELECT al FROM ActivityLog al" // JPQL
+                query = "SELECT al FROM ActivityLog al ORDER BY al.timestamp" // JPQL
+        ),
+        @NamedQuery(
+                name = "getUserActivity",
+                query = "SELECT al FROM ActivityLog al WHERE al.user.id = :userId ORDER BY al.timestamp DESC "// JPQL
         )
 })
 @Table(name = "activitieslogs")
@@ -18,19 +23,29 @@ public class ActivityLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private ActionType action;
     private String details;
     @Column(name = "timestamp", nullable = false, updatable = false)
     private LocalDateTime timestamp;
-    @ManyToOne()
+    @ManyToOne(optional = true)
     private User user;
-    @ManyToOne()
+    @ManyToOne(optional = true)
     private Publication publication;
 
     public ActivityLog() {}
-    public ActivityLog(ActionType action, String details) {
+    public ActivityLog(ActionType action, String details,User user, Publication publication) {
         this.action = action;
         this.details = details;
+        this.user = user;
+        this.publication = publication;
+    }
+
+    // This assures the timestmap to be filled before its creation
+    @PrePersist
+    protected void onCreate() {
+        timestamp = LocalDateTime.now();
     }
 
     public Integer getId() {
@@ -77,8 +92,5 @@ public class ActivityLog {
         this.timestamp = timestamp;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        timestamp = LocalDateTime.now();
-    }
+
 }

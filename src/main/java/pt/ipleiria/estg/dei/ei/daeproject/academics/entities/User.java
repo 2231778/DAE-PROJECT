@@ -1,9 +1,11 @@
 package pt.ipleiria.estg.dei.ei.daeproject.academics.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.UniqueElements;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Status;
 
 import javax.management.DescriptorKey;
@@ -11,7 +13,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllUsers",
+                query = "SELECT u FROM User u ORDER BY u.name"
+        ),
+        @NamedQuery(
+                name = "getUserByEmail",
+                query = "SELECT u FROM User u WHERE u.email = :email"
+        ),
+//        @NamedQuery(
+//                name = "getActiveUsers",
+//                query = "SELECT u FROM User u WHERE u.status = :status"
+//        )
+})
+@Table(name = "users",uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"email"})
+})
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="ROLE")
 public class User extends Versionable {
@@ -24,6 +42,7 @@ public class User extends Versionable {
     private String password;
     @Email
     @NotBlank
+
     private String email;
     @NotBlank
     private String profilePicture;
@@ -31,23 +50,33 @@ public class User extends Versionable {
     @Enumerated(EnumType.STRING) // Makes the Enum be like 0 ,1 ,2 ... We could use also the EnumType.String that would make it like a string !!!
     private Status status; // Custom Enum class !!!
     @OneToMany(mappedBy = "publisher", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Publication> publications;
     // Ratings not added here cause there will not be frequent show of the ratings of the user ( might even not make sense)
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Subscription> subscriptions;
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Comment> comments;
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Rating> ratings;
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<ActivityLog> userActivityLogs;
+    @ManyToMany
+    @JoinTable(
+            name = "user_tags",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    @JsonIgnore
+    private List<Tag> tags;
 
     public User() {
         this.publications = new ArrayList<Publication>();
-        this.subscriptions = new ArrayList<Subscription>();
         this.comments = new ArrayList<Comment>();
         this.ratings = new ArrayList<Rating>();
         this.userActivityLogs = new ArrayList<ActivityLog>();
+        this.tags = new ArrayList<Tag>();
     }
 
     public User(String name, String password, String email,String profilePicture, Status status) {
@@ -57,10 +86,10 @@ public class User extends Versionable {
         this.profilePicture = profilePicture;
         this.status = status;
         this.publications = new ArrayList<Publication>();
-        this.subscriptions = new ArrayList<Subscription>();
         this.comments = new ArrayList<Comment>();
         this.ratings = new ArrayList<Rating>();
         this.userActivityLogs = new ArrayList<ActivityLog>();
+        this.tags = new ArrayList<Tag>();
     }
 
     public String getName() {
@@ -104,16 +133,12 @@ public class User extends Versionable {
         this.status = status;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
-    }
-
-    public List<Subscription> getSubscriptions() {
-        return subscriptions;
-    }
-
-    public void setSubscriptions(List<Subscription> subscriptions) {
-        this.subscriptions = subscriptions;
     }
 
     public List<Publication> getPublications() {
@@ -146,5 +171,23 @@ public class User extends Versionable {
 
     public void setUserActivityLogs(List<ActivityLog> userActivityLogs) {
         this.userActivityLogs = userActivityLogs;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", profilePicture='" + profilePicture + '\'' +
+                ", status=" + status +
+                '}';
     }
 }

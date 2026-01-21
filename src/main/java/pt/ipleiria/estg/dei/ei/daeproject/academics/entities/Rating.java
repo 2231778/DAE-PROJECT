@@ -12,6 +12,10 @@ import java.time.LocalDateTime;
         @NamedQuery(
                 name = "getAllRatings",
                 query = "SELECT r FROM Rating r ORDER BY r.value" // JPQL
+        ),
+        @NamedQuery(
+                name = "getRating",
+                query = "SELECT r FROM Rating r WHERE r.publication.id = :pubId AND r.user.id = :userId"
         )
 })
 @Table(name = "ratings")
