@@ -5,74 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b9f52e5-bc16-4bc2-86d1-087d6055d9a6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/Enums/ActionType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/Enums/RoleType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/Enums/Status.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/Enums/Visibility.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/HelloApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/HelloResource.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/ActivityLogDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/AuthDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/CommentDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/PasswordDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/PublicationDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/PublicationRefDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/RatingDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/TagDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/UserCreateDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/UserDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/UserRefDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/ActivityLogBean.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/AiProcessorBean.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/CommentBean.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/ConfigBean.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/PublicationBean.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/RatingBean.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/TagBean.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/UserBean.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/ai/AiService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/ActivityLog.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/Administrador.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/Colaborador.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/Comment.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/Publication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/Rating.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/Responsavel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/Tag.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/Versionable.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/exceptions/ex.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/exceptions/mappers/JacksonEnumExceptionMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/providers/CorsFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/providers/JacksonConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/security/Authenticated.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/security/AuthenticationFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/security/AuthorizationFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/security/Hasher.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/security/TokenIssuer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ws/ActivityLogService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ws/AuthService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ws/PublicationService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ws/TagService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ws/UserService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/beans.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/badge/Badge.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/badge/Badge.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/input/Input.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/input/Input.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/label/Label.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/label/Label.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/pages/auth/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/pages/auth/login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/pages/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/pages/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/stores/auth-store.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/stores/auth-store.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,7 +74,7 @@
       <option name="presentableId" value="Default" />
       <updated>1769085295632</updated>
       <workItem from="1769085296290" duration="5393000" />
-      <workItem from="1769095330036" duration="1574000" />
+      <workItem from="1769095330036" duration="9801000" />
     </task>
     <servers />
   </component>

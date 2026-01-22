@@ -3,7 +3,7 @@ import type { HTMLAttributes } from "vue"
 import { useVModel } from "@vueuse/core"
 import { cn } from "@/lib/utils"
 
-const props = defineProps<{
+const props = defineProps</* @vue-ignore */{
   defaultValue?: string | number
   modelValue?: string | number
   class?: HTMLAttributes["class"]

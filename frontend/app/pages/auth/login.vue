@@ -7,19 +7,19 @@
         </div>
         <CardTitle class="text-3xl font-bold tracking-tight text-slate-900">Sign In</CardTitle>
         <CardDescription>
-          Enter your researcher credentials to access the platform
+          Enter your member credentials to access the platform
         </CardDescription>
       </CardHeader>
 
       <CardContent>
         <form @submit.prevent="handleLogin" class="space-y-5">
           <div class="space-y-2 text-left">
-            <Label for="username" class="text-sm font-semibold">Username</Label>
+            <Label for="email" class="text-sm font-semibold">Email</Label>
             <Input
-                id="username"
-                v-model="credentials.username"
-                type="text"
-                placeholder="e.g. john_doe"
+                id="email"
+                v-model="credentials.email"
+                type="email"
+                placeholder="xxx@gmail.com"
                 class="bg-white"
                 required
             />
@@ -46,8 +46,9 @@
           </Transition>
 
           <Button
-              type="submit"
-              class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-6 rounded-lg transition-all"
+              type="button"
+              @click="handleLogin"
+              class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-6 rounded-lg transition-all cursor-pointer relative z-20"
               :disabled="isLoading"
           >
             <template v-if="isLoading">
@@ -55,66 +56,65 @@
               Authenticating...
             </template>
             <template v-else>
-              Sign In to Repository
+              Sign In
             </template>
           </Button>
         </form>
       </CardContent>
-
-      <CardFooter class="flex flex-col gap-4 border-t bg-slate-50/50 py-6 text-center rounded-b-xl">
-        <p class="text-xs text-muted-foreground">
-          Scientific Management Platform &copy; 2026
-        </p>
-      </CardFooter>
     </Card>
   </div>
 </template>
 
 <script setup>
+// Imports explícitos para garantir que o Nuxt não falha
+import { ref, reactive, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth-store'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 
 const config = useRuntimeConfig()
 const authStore = useAuthStore()
 
 const credentials = reactive({
-  username: '',
+  email: '',
   password: ''
 })
 
 const errorMsg = ref('')
 const isLoading = ref(false)
 
+
+onMounted(() => {
+  console.log("Login page mounted. API Base:", config.public.apiBase)
+})
+
 async function handleLogin() {
+  console.log("Button clicked! Attempting login for:", credentials.username)
+
   errorMsg.value = ''
   isLoading.value = true
 
   try {
-    // 1. POST Credentials to get JWT Token
-    // Matches your Java Backend: @Path("/auth/login")
     const token = await $fetch(`${config.public.apiBase}/auth/login`, {
       method: 'POST',
       body: credentials
     })
 
-    // 2. GET User Profile using the Token
-    // Matches your Java Backend: @Path("/auth/user")
+    console.log("Token received successfully")
+
     const userData = await $fetch(`${config.public.apiBase}/auth/user`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
 
-    // 3. Update Global State (Pinia Store)
     authStore.login(token, userData)
 
-    // 4. Navigate back to Home or Dashboard
-    navigateTo('/')
+    console.log("Login successful, redirecting...")
+    await navigateTo('/dashboard')
   } catch (err) {
-    // Check if it's a 401 Unauthorized or other
-    errorMsg.value = 'Authentication failed. Please check your username and password.'
-    console.error('Login attempt failed:', err)
+    console.error("Login Error:", err)
+    errorMsg.value = 'Authentication failed. Please check your connection and credentials.'
   } finally {
     isLoading.value = false
   }

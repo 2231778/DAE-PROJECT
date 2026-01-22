@@ -12,6 +12,7 @@ const props = defineProps< /* @vue-ignore */ PrimitiveProps & {
   class?: HTMLAttributes["class"]
 }>()
 
+const { variant } = props
 const delegatedProps = reactiveOmit(props, "class")
 </script>
 

@@ -17,10 +17,6 @@
         </p>
 
         <div class="flex flex-col sm:flex-row justify-center gap-4">
-          <Button as-child size="lg" class="rounded-full px-8 shadow-lg shadow-primary/20 transition-all hover:scale-105">
-            <NuxtLink to="/publications">Explore Publications</NuxtLink>
-          </Button>
-
           <Button v-if="!authStore.token" variant="outline" as-child size="lg" class="rounded-full px-8 text-black border-slate-700 hover:scale-105 transition-all">
             <NuxtLink to="/auth/login">Researcher Login</NuxtLink>
           </Button>
@@ -99,10 +95,6 @@
         </div>
       </div>
     </section>
-
-    <footer class="border-t py-12 px-6 text-center text-muted-foreground text-sm">
-      <p>&copy; 2026 XYZ Research Center. Scientific Integrity in the Digital Age.</p>
-    </footer>
   </div>
 </template>
 
