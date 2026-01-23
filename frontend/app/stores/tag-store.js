@@ -65,7 +65,6 @@ export const useTagStore = defineStore('tagStore', () => {
                 headers: getHeaders()
             })
 
-            // CORREÇÃO: Alternar entre as STRINGS do Enum, não booleanos
             const tag = tags.value.find(t => t.id === id)
             if (tag) {
                 tag.visibility = tag.visibility === 'VISIBLE' ? 'INVISIBLE' : 'VISIBLE'

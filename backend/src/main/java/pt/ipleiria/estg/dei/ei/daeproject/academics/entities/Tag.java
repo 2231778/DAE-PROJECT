@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.ei.daeproject.academics.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public class Tag {
     private Integer id;
     private String name;
     private String description;
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private Visibility visibility;
     @ManyToMany(mappedBy = "tags")
     private List<Publication> publications;

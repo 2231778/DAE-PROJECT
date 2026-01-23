@@ -142,7 +142,6 @@ const currentId = ref(null)
 const form = reactive({
   name: '',
   description: '',
-  visibility: true
 })
 
 onMounted(() => {
@@ -156,14 +155,13 @@ function openModal(tag = null) {
     form.name = tag.name
     form.description = tag.description
 
-    // CORREÇÃO: Converte a String do Backend ('VISIBLE') para Boolean (true) para o Checkbox
     form.visibility = tag.visibility === 'VISIBLE'
   } else {
     isEditing.value = false
     currentId.value = null
     form.name = ''
     form.description = ''
-    form.visibility = true
+
   }
   showModal.value = true
 }

@@ -60,6 +60,7 @@ function onImageError(e) {
 const { data: activityLogs, pending: pendingLogs, refresh: refreshLogs } = await useFetch(
     () => `${config.public.apiBase}/activity-log/user/${user.value?.id}`,
     {
+
       headers: { Authorization: `Bearer ${token.value}` },
       watch: [user],
       transform: (res) => res || []
