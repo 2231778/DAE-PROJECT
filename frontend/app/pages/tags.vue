@@ -3,58 +3,59 @@
     <div class="flex justify-between items-center">
       <div>
         <h1 class="text-3xl font-bold tracking-tight text-slate-900">Tag Management</h1>
-        <p class="text-muted-foreground italic">Add or remove system categories for research classification.</p>
+        <p class="text-muted-foreground">Add or remove system categories.</p>
       </div>
-      <Button @click="openModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold transition-transform active:scale-95">
-        + New Tag
-      </Button>
+      <Button @click="openModal()">+ New Tag</Button>
     </div>
 
-    <div class="border rounded-lg p-4 bg-white shadow-sm overflow-hidden">
+    <div class="border rounded-lg p-4 bg-white shadow">
       <table class="w-full text-left text-sm">
-        <thead class="border-b bg-slate-50/50">
+        <thead class="border-b">
         <tr>
-          <th class="p-4 font-bold uppercase text-[11px] text-slate-500 tracking-wider">ID</th>
-          <th class="p-4 font-bold uppercase text-[11px] text-slate-500 tracking-wider">Name</th>
-          <th class="p-4 font-bold uppercase text-[11px] text-slate-500 tracking-wider">Description</th>
-          <th class="p-4 font-bold uppercase text-[11px] text-slate-500 tracking-wider">Visibility</th>
-          <th class="p-4 text-right font-bold uppercase text-[11px] text-slate-500 tracking-wider">Actions</th>
+          <th class="p-4 font-medium">ID</th>
+          <th class="p-4 font-medium">Name</th>
+          <th class="p-4 font-medium">Description</th>
+          <th class="p-4 font-medium">Visibility</th>
+          <th class="p-4 text-right font-medium">Actions</th>
         </tr>
         </thead>
-        <tbody class="divide-y">
+        <tbody>
         <tr
             v-for="tag in tagStore.tags"
             :key="tag.id"
-            class="hover:bg-slate-50/50 transition-colors"
+            class="border-b hover:bg-gray-50"
         >
-          <td class="p-4 font-mono text-slate-400">#{{ tag.id }}</td>
+          <td class="p-4 font-bold">{{ tag.id }}</td>
           <td class="p-4">
-              <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold border border-blue-100 uppercase tracking-tighter">
+              <span
+                  class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold"
+              >
                 {{ tag.name }}
               </span>
           </td>
-          <td class="p-4 text-slate-600 max-w-xs truncate">{{ tag.description }}</td>
+          <td class="p-4 text-gray-500">{{ tag.description }}</td>
+
           <td class="p-4">
             <button
                 @click="tagStore.toggleVisibility(tag.id)"
-                :class="tag.visibility ? 'bg-green-500' : 'bg-slate-300'"
-                class="relative inline-flex h-5 w-10 items-center rounded-full transition-colors cursor-pointer shadow-inner"
+                :class="tag.visibility === 'VISIBLE' ? 'bg-green-500' : 'bg-gray-300'"
+                class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
             >
                 <span
-                    :class="tag.visibility ? 'translate-x-5' : 'translate-x-1'"
-                    class="inline-block h-3 w-3 transform rounded-full bg-white transition-transform"
+                    :class="tag.visibility === 'VISIBLE' ? 'translate-x-6' : 'translate-x-1'"
+                    class="inline-block h-4 w-4 transform rounded-full bg-white transition"
                 />
             </button>
           </td>
+
           <td class="p-4 text-right space-x-2">
-            <Button variant="outline" size="sm" @click="openModal(tag)" class="h-8 text-xs font-bold border-slate-200">
+            <Button variant="outline" size="sm" @click="openModal(tag)">
               Edit
             </Button>
             <Button
                 variant="destructive"
                 size="sm"
-                @click="confirmDelete(tag.id)"
-                class="h-8 text-xs font-bold shadow-sm"
+                @click="tagStore.deleteTag(tag.id)"
             >
               Delete
             </Button>
@@ -63,64 +64,64 @@
         </tbody>
       </table>
 
-      <div v-if="tagStore.isLoading" class="p-12 text-center text-muted-foreground">
-        <div class="animate-spin h-6 w-6 border-2 border-slate-900 border-t-transparent rounded-full mx-auto mb-2"></div>
-        <p class="text-xs font-bold uppercase tracking-widest">Updating Tags...</p>
+      <div
+          v-if="tagStore.isLoading"
+          class="p-8 text-center text-muted-foreground"
+      >
+        Loading...
       </div>
-      <div v-if="!tagStore.isLoading && tagStore.tags.length === 0" class="p-20 text-center">
-        <div class="text-4xl mb-4 grayscale opacity-30">🏷️</div>
-        <h3 class="font-bold text-slate-900">No categories found</h3>
-        <p class="text-sm text-muted-foreground mt-1">Create your first tag to start organizing publications.</p>
+      <div
+          v-if="!tagStore.isLoading && tagStore.tags.length === 0"
+          class="p-8 text-center text-muted-foreground"
+      >
+        No tags found.
       </div>
     </div>
 
-    <div v-if="showModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] flex items-center justify-center z-50 p-4">
-      <div class="bg-white p-8 rounded-xl w-full max-w-md space-y-6 shadow-2xl border border-slate-100">
-        <div class="space-y-1">
-          <h2 class="text-2xl font-bold text-slate-900">
-            {{ isEditing ? 'Edit Tag' : 'New Category' }}
-          </h2>
-          <p class="text-xs text-slate-500 uppercase tracking-tighter">Enter the details for this classification tag</p>
+    <div
+        v-if="showModal"
+        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+    >
+      <div class="bg-white p-6 rounded-lg w-full max-w-md space-y-4 shadow-xl">
+        <h2 class="text-xl font-bold">
+          {{ isEditing ? 'Edit Tag' : 'Create New Tag' }}
+        </h2>
+
+        <div class="space-y-2">
+          <label class="block text-sm font-medium">Name</label>
+          <input
+              v-model="form.name"
+              class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none"
+              placeholder="e.g. Backend"
+          />
         </div>
 
-        <div class="space-y-4">
-          <div class="space-y-2">
-            <Label class="text-[10px] font-bold uppercase text-slate-400">Tag Name</Label>
-            <Input
-                v-model="form.name"
-                class="w-full bg-slate-50 border-slate-200 focus:ring-slate-900"
-                placeholder="e.g. Artificial Intelligence"
+        <div class="space-y-2">
+          <label class="block text-sm font-medium">Description</label>
+          <input
+              v-model="form.description"
+              class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none"
+              placeholder="Tag description"
+          />
+        </div>
+
+        <div class="space-y-2">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input
+                type="checkbox"
+                v-model="form.visibility"
+                class="w-4 h-4 text-blue-600 rounded"
             />
-          </div>
-
-          <div class="space-y-2">
-            <Label class="text-[10px] font-bold uppercase text-slate-400">Description</Label>
-            <textarea
-                v-model="form.description"
-                rows="3"
-                class="w-full border border-slate-200 bg-slate-50 p-3 rounded-md text-sm focus:ring-2 focus:ring-slate-900 outline-none transition-all"
-                placeholder="Briefly describe what this tag covers..."
-            ></textarea>
-          </div>
-
-          <div class="space-y-2 pt-2" v-if="!isEditing">
-            <label class="flex items-center gap-3 cursor-pointer group">
-              <input
-                  type="checkbox"
-                  v-model="form.visibility"
-                  class="w-4 h-4 text-slate-900 rounded border-slate-300 focus:ring-slate-900"
-              />
-              <span class="text-xs font-medium text-slate-600 group-hover:text-slate-900 transition-colors">Make public immediately?</span>
-            </label>
-          </div>
+            <span class="text-sm">Is this tag visible publically?</span>
+          </label>
         </div>
 
-        <div class="flex justify-end gap-3 pt-4 border-t border-slate-50">
-          <Button variant="ghost" @click="showModal = false" class="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900">
+        <div class="flex justify-end gap-2 pt-4">
+          <Button variant="ghost" @click="showModal = false">
             Cancel
           </Button>
-          <Button @click="handleSave" class="bg-slate-900 text-white text-xs font-bold uppercase tracking-widest px-8">
-            {{ isEditing ? 'Save Changes' : 'Create Tag' }}
+          <Button @click="handleSave">
+            {{ isEditing ? 'Save' : 'Create' }}
           </Button>
         </div>
       </div>
@@ -129,96 +130,62 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue' // Importações essenciais da Vue
 import { useTagStore } from '@/stores/tag-store'
-import { useAuthStore } from '@/stores/auth-store' // Necessário para o middleware
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 
 const tagStore = useTagStore()
-const authStore = useAuthStore()
-
-// Controlo do Modal e Formulário
 const showModal = ref(false)
 const isEditing = ref(false)
 const currentId = ref(null)
 
+// O formulário mantém-se com boolean (true/false) para funcionar com o Checkbox
 const form = reactive({
   name: '',
   description: '',
-  visibility: true
 })
 
-// Segurança: Bloqueia utilizadores sem permissões
-definePageMeta({
-  middleware: function (to, from) {
-    const auth = useAuthStore()
-    const role = auth.user?.role?.toUpperCase()
-    if (role !== 'ADMIN' && role !== 'RESPONSAVEL') {
-      return navigateTo('/dashboard')
-    }
-  }
-})
-
-// Carregamento inicial
 onMounted(() => {
   tagStore.fetchTags()
 })
 
-// Abre o modal em modo de criação ou edição
 function openModal(tag = null) {
   if (tag) {
     isEditing.value = true
     currentId.value = tag.id
     form.name = tag.name
     form.description = tag.description
-    form.visibility = tag.visibility
+
+    form.visibility = tag.visibility === 'VISIBLE'
   } else {
     isEditing.value = false
     currentId.value = null
     form.name = ''
     form.description = ''
-    form.visibility = true
+
   }
   showModal.value = true
 }
 
-// Confirmação extra antes de apagar
-async function confirmDelete(id) {
-  if (confirm("Are you sure? This will remove this category from all associated publications.")) {
-    await tagStore.deleteTag(id)
-  }
-}
-
-// Persistência de dados
 async function handleSave() {
-  if (!form.name.trim()) {
-    alert("Please enter a tag name.")
-    return
-  }
-
   try {
-    if (isEditing.value) {
-      await tagStore.updateTag(currentId.value, {
-        name: form.name,
-        description: form.description
-      })
-    } else {
-      await tagStore.createTag({ ...form })
+    // CORREÇÃO: Prepara o objeto convertendo Boolean -> String para a API
+    const payload = {
+      name: form.name,
+      description: form.description || null, // Envia null se vazio
+      visibility: form.visibility ? 'VISIBLE' : 'INVISIBLE'
     }
+
+    if (isEditing.value) {
+      await tagStore.updateTag(currentId.value, payload)
+    } else {
+      await tagStore.createTag(payload)
+    }
+
     showModal.value = false
-  } catch (error) {
-    console.error("Failed to save tag:", error)
-    alert("Error saving tag. Check the console for details.")
+  } catch (e) {
+    // Mostra o erro real vindo do backend
+    const msg = e.data?.message || e.message || "Erro desconhecido"
+    alert(`Erro ao salvar: ${msg}`)
   }
 }
 </script>
-
-<style scoped>
-@reference "@/assets/css/tailwind.css";
-
-/* Transição suave para o modal */
-.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
-</style>
