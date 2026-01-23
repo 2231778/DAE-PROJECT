@@ -62,7 +62,7 @@ public class User extends Versionable {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<ActivityLog> userActivityLogs;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_tags",
             joinColumns = @JoinColumn(name = "user_id"),

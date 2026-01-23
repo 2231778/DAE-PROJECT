@@ -26,7 +26,7 @@ public class Rating {
     @NotNull
     @Min(1)
     @Max(5)
-    private Integer value;
+    private Double value;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -44,7 +44,7 @@ public class Rating {
 
     }
 
-    public Rating(Integer value, User user, Publication publication) {
+    public Rating(Double value, User user, Publication publication) {
         this.value = value;
         this.user = user;
         this.publication = publication;
@@ -66,11 +66,11 @@ public class Rating {
         return id;
     }
 
-    public @NotNull @Min(1) @Max(5) Integer getValue() {
+    public @NotNull @Min(1) @Max(5) Double getValue() {
         return value;
     }
 
-    public void setValue(@NotNull @Min(1) @Max(5) Integer value) {
+    public void setValue(@NotNull @Min(1) @Max(5) Double value) {
         this.value = value;
     }
 

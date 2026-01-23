@@ -28,7 +28,7 @@ public class Comment {
     private LocalDateTime createdAt;
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @NotNull
     private Publication publication;
     @ManyToOne(fetch = FetchType.EAGER)

@@ -8,6 +8,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.ws.rs.core.Response;
 import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.ActionType;
+import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.CommentDTO;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Comment;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Publication;
@@ -94,6 +95,23 @@ public class CommentBean {
         Hibernate.initialize(comment.getPublication());
 
         return CommentDTO.from(comment);
+    }
+
+    public void visibility(Integer id) {
+        Comment comment = find(id);
+        if (comment == null) {
+
+            throw new IllegalArgumentException("Comment not found");
+        }
+        if (comment.getVisibility() == Visibility.VISIBLE) {
+            comment.setVisibility(Visibility.INVISIBLE);
+        } else {
+            comment.setVisibility(Visibility.VISIBLE);
+        }
+        entityManager.merge(comment);
+        //Log
+        activityLogBean.create(ActionType.UPDATE, "PUBLICATION VISIBILITY UPDATED", comment.getAuthor(), comment.getPublication());
+
     }
 
     public void delete(Integer id) {

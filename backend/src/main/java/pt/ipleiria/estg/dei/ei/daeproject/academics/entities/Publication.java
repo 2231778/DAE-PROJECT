@@ -19,8 +19,12 @@ import java.util.concurrent.CompletionException;
 @Entity
 @NamedQueries({
         @NamedQuery(
-                name = "getAllPublications",
+                name = "getAllVisiblePublications",
                 query = "SELECT p FROM Publication p WHERE p.visibility = :visibility ORDER BY p.title"
+        ),
+        @NamedQuery(
+                name = "getAllPublications",
+                query = "SELECT p FROM Publication p ORDER BY p.title"
         ),
         @NamedQuery(
                 name = "getMyPublications",

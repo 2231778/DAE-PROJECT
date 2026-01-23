@@ -65,7 +65,6 @@ public class PublicationBean {
     public List<Publication> findAll() {
 
         return entityManager.createNamedQuery("getAllPublications", Publication.class)
-                .setParameter("visibility", Visibility.VISIBLE)
                 .getResultList();
     }
     public List<PublicationDTO> findAllPublicationDTOs() {

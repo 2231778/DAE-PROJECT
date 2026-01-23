@@ -34,18 +34,20 @@
               </span>
           </td>
           <td class="p-4 text-gray-500">{{ tag.description }}</td>
+
           <td class="p-4">
             <button
                 @click="tagStore.toggleVisibility(tag.id)"
-                :class="tag.visibility ? 'bg-green-500' : 'bg-gray-300'"
+                :class="tag.visibility === 'VISIBLE' ? 'bg-green-500' : 'bg-gray-300'"
                 class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
             >
                 <span
-                    :class="tag.visibility ? 'translate-x-6' : 'translate-x-1'"
+                    :class="tag.visibility === 'VISIBLE' ? 'translate-x-6' : 'translate-x-1'"
                     class="inline-block h-4 w-4 transform rounded-full bg-white transition"
                 />
             </button>
           </td>
+
           <td class="p-4 text-right space-x-2">
             <Button variant="outline" size="sm" @click="openModal(tag)">
               Edit
@@ -103,14 +105,14 @@
           />
         </div>
 
-        <div class="space-y-2" v-if="!isEditing">
+        <div class="space-y-2">
           <label class="flex items-center gap-2 cursor-pointer">
             <input
                 type="checkbox"
                 v-model="form.visibility"
                 class="w-4 h-4 text-blue-600 rounded"
             />
-            <span class="text-sm">Make public immediately?</span>
+            <span class="text-sm">Is this tag visible publically?</span>
           </label>
         </div>
 
@@ -136,10 +138,10 @@ const showModal = ref(false)
 const isEditing = ref(false)
 const currentId = ref(null)
 
+// O formulário mantém-se com boolean (true/false) para funcionar com o Checkbox
 const form = reactive({
   name: '',
   description: '',
-  visibility: true
 })
 
 onMounted(() => {
@@ -152,26 +154,38 @@ function openModal(tag = null) {
     currentId.value = tag.id
     form.name = tag.name
     form.description = tag.description
-    form.visibility = tag.visibility
+
+    form.visibility = tag.visibility === 'VISIBLE'
   } else {
     isEditing.value = false
     currentId.value = null
     form.name = ''
     form.description = ''
-    form.visibility = true
+
   }
   showModal.value = true
 }
 
 async function handleSave() {
-  if (isEditing.value) {
-    await tagStore.updateTag(currentId.value, {
+  try {
+    // CORREÇÃO: Prepara o objeto convertendo Boolean -> String para a API
+    const payload = {
       name: form.name,
-      description: form.description
-    })
-  } else {
-    await tagStore.createTag({ ...form })
+      description: form.description || null, // Envia null se vazio
+      visibility: form.visibility ? 'VISIBLE' : 'INVISIBLE'
+    }
+
+    if (isEditing.value) {
+      await tagStore.updateTag(currentId.value, payload)
+    } else {
+      await tagStore.createTag(payload)
+    }
+
+    showModal.value = false
+  } catch (e) {
+    // Mostra o erro real vindo do backend
+    const msg = e.data?.message || e.message || "Erro desconhecido"
+    alert(`Erro ao salvar: ${msg}`)
   }
-  showModal.value = false
 }
 </script>

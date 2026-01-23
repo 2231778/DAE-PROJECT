@@ -110,16 +110,16 @@ public class ConfigBean {
 
             // --- Ratings ---
             // user rates pub1 and pub2
-            ratingBean.create(5, pub1.getId(), user.getId());
-            ratingBean.create(4, pub2.getId(), user.getId());
+            ratingBean.create(5.0, pub1.getId(), user.getId());
+            ratingBean.create(4.0, pub2.getId(), user.getId());
 
             // publisher1 rates pub1 and pub2
-            ratingBean.create(4, pub1.getId(), publisher1.getId());
-            ratingBean.create(5, pub2.getId(), publisher1.getId());
+            ratingBean.create(4.0, pub1.getId(), publisher1.getId());
+            ratingBean.create(5.0, pub2.getId(), publisher1.getId());
 
             // publisher2 rates pub1 and pub2
-            ratingBean.create(3, pub1.getId(), publisher2.getId());
-            ratingBean.create(4, pub2.getId(), publisher2.getId());
+            ratingBean.create(3.0, pub1.getId(), publisher2.getId());
+            ratingBean.create(4.0, pub2.getId(), publisher2.getId());
 
         } catch (Exception e) {
             System.err.println("Startup user already exists or failed: " + e.getMessage());

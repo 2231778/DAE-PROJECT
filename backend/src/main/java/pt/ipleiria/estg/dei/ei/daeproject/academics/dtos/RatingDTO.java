@@ -9,12 +9,12 @@ import java.util.stream.Collectors;
 
 public class RatingDTO {
     private Integer id;
-    private Integer value;
+    private Double value;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 
     public RatingDTO() {}
-    public RatingDTO(Integer id, Integer value, LocalDateTime createdDate, LocalDateTime updatedDate) {
+    public RatingDTO(Integer id, Double value, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.id = id;
         this.value = value;
         this.createdDate = createdDate;
@@ -22,7 +22,8 @@ public class RatingDTO {
     }
 
     public static RatingDTO from(Rating rating) {
-        return new RatingDTO(rating.getId(),
+        return new RatingDTO(
+                rating.getId(),
                 rating.getValue(),
                 rating.getCreatedAt(),
                 rating.getUpdatedAt()
@@ -41,13 +42,6 @@ public class RatingDTO {
         this.id = id;
     }
 
-    public Integer getValue() {
-        return value;
-    }
-
-    public void setValue(Integer value) {
-        this.value = value;
-    }
 
     public LocalDateTime getCreatedDate() {
         return createdDate;
@@ -63,5 +57,13 @@ public class RatingDTO {
 
     public void setUpdatedDate(LocalDateTime updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public Double getValue() {
+        return value;
+    }
+
+    public void setValue(Double value) {
+        this.value = value;
     }
 }

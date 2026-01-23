@@ -19,10 +19,12 @@ public class UserDTO {
     private Status status;
     private String role;
     private List<CommentDTO> comments;
+    private List<TagDTO> tags;
     //TODO: SEE IF I PUT PUBLICATION OF USERS HERE
 
     public UserDTO() {
         this.comments = new ArrayList<CommentDTO>();
+        this.tags = new ArrayList<TagDTO>();
     }
 
     public UserDTO(Integer id, String name, String email, String profilePicture, Status status, String role) {
@@ -33,6 +35,7 @@ public class UserDTO {
         this.status = status;
         this.role = role;
         this.comments = new ArrayList<CommentDTO>();
+        this.tags = new ArrayList<TagDTO>();
     }
 
     public static UserDTO from(User user) {
@@ -53,12 +56,19 @@ public class UserDTO {
                 user.getStatus(),
                 role
         );
+
         if (Hibernate.isInitialized(user.getComments())) {
             dto.comments = user.getComments()
                     .stream()
                     .map(CommentDTO::from)
                     .collect(Collectors.toList());
         }
+
+        dto.tags = user.getTags()
+                    .stream()
+                    .map(TagDTO::from)
+                    .collect(Collectors.toList());
+
         return dto;
     }
 
@@ -114,4 +124,11 @@ public class UserDTO {
         this.role = role;
     }
 
+    public List<TagDTO> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<TagDTO> tags) {
+        this.tags = tags;
+    }
 }
