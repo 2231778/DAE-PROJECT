@@ -16,6 +16,14 @@
 
           <div v-if="authStore.token" class="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
             <NuxtLink to="/publications" class="hover:text-primary transition-colors">Publications</NuxtLink>
+
+            <NuxtLink
+                v-if="canManageTags"
+                to="/tags"
+                class="hover:text-primary transition-colors"
+            >
+              Tags
+            </NuxtLink>
           </div>
         </div>
 
@@ -55,6 +63,10 @@
                   <NuxtLink to="/profile" class="w-full cursor-pointer">👤 My Profile</NuxtLink>
                 </DropdownMenuItem>
 
+                <DropdownMenuItem v-if="canManageTags" as-child>
+                  <NuxtLink to="/tags" class="w-full cursor-pointer">🏷️ Manage Tags</NuxtLink>
+                </DropdownMenuItem>
+
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem @click="handleLogout" class="text-red-600 cursor-pointer focus:bg-red-50 focus:text-red-600">
@@ -86,8 +98,10 @@
 </template>
 
 <script setup>
-import { Button } from '~/components/ui/button/index.js'
-import { useAuthStore } from '~/stores/auth-store.js'
+import { computed } from 'vue'
+import { Button } from '~/components/ui/button'
+import { Badge } from '~/components/ui/badge'
+import { useAuthStore } from '~/stores/auth-store'
 import { Avatar, AvatarImage, AvatarFallback } from '~/components/ui/avatar'
 import {
   DropdownMenu,
@@ -100,16 +114,13 @@ import {
 
 const authStore = useAuthStore()
 
-function getInitials(name) {
-  if (!name) return 'U'
-  return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)
-}
+// Lógica de Permissão para as Tags
+const canManageTags = computed(() => {
+  const role = authStore.user?.role?.toUpperCase() || ''
+  return role === 'ADMIN' || role === 'RESPONSAVEL'
+})
 
-function handleLogout() {
-  authStore.logout()
-  navigateTo('/')
-}
-
+// Configuração dos Badges de Cargo
 const roleBadgeConfig = computed(() => {
   const role = authStore.user?.role?.toUpperCase() || ''
 
@@ -128,19 +139,28 @@ const roleBadgeConfig = computed(() => {
       }
     default:
       return {
-        label: 'Colaborator',
+        label: 'Collaborator',
         class: 'bg-slate-50 text-slate-600 border-slate-100',
         emoji: '🎓'
       }
   }
 })
+
+function getInitials(name) {
+  if (!name) return 'U'
+  return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)
+}
+
+function handleLogout() {
+  authStore.logout()
+  navigateTo('/')
+}
 </script>
 
 <style scoped>
-/* Estilo para destacar o link ativo */
 @reference "@/assets/css/tailwind.css";
 
 .router-link-active:not([href="/"]) {
-  @apply text-primary font-bold;
+  @apply text-primary font-bold border-b-2 border-primary pb-1 transition-all;
 }
 </style>
