@@ -5,37 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b9f52e5-bc16-4bc2-86d1-087d6055d9a6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/app/pages/publications/[id].vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/app/pages/publications/new.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/app/pages/publications/update/[id].vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/RatingDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/RatingDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/CommentBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/CommentBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/ConfigBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/ConfigBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/PublicationBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/PublicationBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/RatingBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/RatingBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/Comment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/Publication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/Publication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/Rating.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/Rating.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ws/PublicationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ws/PublicationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/button/Button.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/button/Button.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/button/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/button/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/card/Card.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/card/Card.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/card/CardAction.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/card/CardAction.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/card/CardContent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/card/CardContent.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/card/CardDescription.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/card/CardDescription.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/card/CardFooter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/card/CardFooter.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/card/CardHeader.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/card/CardHeader.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/card/CardTitle.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/card/CardTitle.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/card/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/card/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/input/Input.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/input/Input.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/input/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/input/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/label/Label.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/label/Label.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/label/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/label/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/pages/publications/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/pages/publications/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/UserDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +50,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "setup-projeto",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
