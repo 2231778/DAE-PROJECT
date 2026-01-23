@@ -20,6 +20,7 @@ public class UserDTO {
     private String role;
     private List<CommentDTO> comments;
     private List<TagDTO> tags;
+    private boolean deleted;
     //TODO: SEE IF I PUT PUBLICATION OF USERS HERE
 
     public UserDTO() {
@@ -27,13 +28,14 @@ public class UserDTO {
         this.tags = new ArrayList<TagDTO>();
     }
 
-    public UserDTO(Integer id, String name, String email, String profilePicture, Status status, String role) {
+    public UserDTO(Integer id, String name, String email, String profilePicture, Status status, String role,boolean deleted) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.profilePicture = profilePicture;
         this.status = status;
         this.role = role;
+        this.deleted = deleted;
         this.comments = new ArrayList<CommentDTO>();
         this.tags = new ArrayList<TagDTO>();
     }
@@ -54,7 +56,8 @@ public class UserDTO {
                 user.getEmail(),
                 user.getProfilePicture(),
                 user.getStatus(),
-                role
+                role,
+                user.isDeleted()
         );
 
         if (Hibernate.isInitialized(user.getComments())) {
@@ -130,5 +133,13 @@ public class UserDTO {
 
     public void setTags(List<TagDTO> tags) {
         this.tags = tags;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

@@ -70,6 +70,7 @@ public class User extends Versionable {
     )
     @JsonIgnore
     private List<Tag> tags;
+    private boolean deleted;
 
     public User() {
         this.publications = new ArrayList<Publication>();
@@ -77,6 +78,7 @@ public class User extends Versionable {
         this.ratings = new ArrayList<Rating>();
         this.userActivityLogs = new ArrayList<ActivityLog>();
         this.tags = new ArrayList<Tag>();
+        this.deleted = false;
     }
 
     public User(String name, String password, String email,String profilePicture, Status status) {
@@ -90,6 +92,7 @@ public class User extends Versionable {
         this.ratings = new ArrayList<Rating>();
         this.userActivityLogs = new ArrayList<ActivityLog>();
         this.tags = new ArrayList<Tag>();
+        this.deleted = false;
     }
 
     public String getName() {
@@ -189,5 +192,13 @@ public class User extends Versionable {
                 ", profilePicture='" + profilePicture + '\'' +
                 ", status=" + status +
                 '}';
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }
