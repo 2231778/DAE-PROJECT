@@ -26,7 +26,7 @@ public class RatingBean {
     private ActivityLogBean activityLogBean;
 
 
-    public Rating create(Integer value, Integer publicationId, Integer userId) {
+    public Rating create(Double value, Integer publicationId, Integer userId) {
 
         if (!(value >= 0 && value <= 5)) {
             throw new IllegalArgumentException("Value must be between 0 and 5");
@@ -59,7 +59,7 @@ public class RatingBean {
 
     }
 
-    public Rating update(Integer value, Integer publicationId, Integer userId) {
+    public Rating update(Double value, Integer publicationId, Integer userId) {
         try {
             Rating rating;
             try {
