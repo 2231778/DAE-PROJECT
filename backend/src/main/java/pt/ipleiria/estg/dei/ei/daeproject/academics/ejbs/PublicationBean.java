@@ -27,11 +27,17 @@ public class PublicationBean {
     private ActivityLogBean activityLogBean;
     @EJB
     private AiProcessorBean aiProcessorBean;
+    @EJB
+    private EmailBean emailBean;
 
     public Publication create(String title, String description, String file, User publisher, String author) {
         Publication publication = new Publication(title, description, file, publisher, author);
 
         entityManager.persist(publication);
+
+        //Send Email
+        emailBean.sendNewsEmail(publication.getId());
+
 
         //Log
         activityLogBean.create(ActionType.CREATE, "PUBLICATION CREATED", publisher, publication);
@@ -134,6 +140,9 @@ public class PublicationBean {
         publication.setFile(file);
         publication.setAuthor(author);
         entityManager.merge(publication);
+
+        //Send update Email
+        emailBean.sendUpdateEmail(publication.getId());
 
         //Log
         activityLogBean.create(ActionType.UPDATE, "PUBLICATION UPDATED", publication.getPublisher(), publication);
