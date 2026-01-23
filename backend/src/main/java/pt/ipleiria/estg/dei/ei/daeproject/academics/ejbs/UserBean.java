@@ -13,6 +13,8 @@ import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.*;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.security.Hasher;
 
 import java.util.List;
+import java.util.UUID;
+import java.time.LocalDateTime;
 
 
 @Stateless
@@ -75,6 +77,46 @@ public class UserBean {
                     .setParameter(1, role.name()) // "ADMIN", "COLABORADOR", "RESPONSAVEL"
                     .setParameter(2, id)
                     .executeUpdate();
+        }
+    }
+
+    public String generatePasswordResetToken(String email) {
+        User user = findByEmail(email);
+        if (user == null) return null;
+
+        String token = java.util.UUID.randomUUID().toString();
+        PasswordResetToken resetToken = new PasswordResetToken();
+        resetToken.setToken(token);
+        resetToken.setUser(user);
+
+        entityManager.persist(resetToken);
+        return token;
+    }
+
+    public boolean resetPasswordWithToken(String token, String newPassword) {
+        try {
+            PasswordResetToken resetToken = entityManager.createQuery(
+                            "SELECT t FROM PasswordResetToken t WHERE t.token = :token",
+                            PasswordResetToken.class)
+                    .setParameter("token", token)
+                    .getSingleResult();
+
+            if (resetToken.getExpiryDate().isBefore(java.time.LocalDateTime.now())) {
+                entityManager.remove(resetToken);
+                return false;
+            }
+
+            User user = resetToken.getUser();
+            user.setPassword(Hasher.hash(newPassword));
+            entityManager.merge(user);
+
+            entityManager.remove(resetToken);
+
+            activityLogBean.create(ActionType.UPDATE, "Password reset via email token", user);
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 

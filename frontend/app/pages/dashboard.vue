@@ -62,13 +62,16 @@
         </CardContent>
       </Card>
 
-      <Card v-if="['Administrador', 'Responsável'].includes(authStore.user?.role)" class="border-blue-100 bg-blue-50/10">
+      <Card v-if="['ADMIN', 'Responsável'].includes(authStore.user?.role)" class="border-blue-100 bg-blue-50/10">
         <CardHeader>
           <CardTitle>Curation Tools</CardTitle>
           <CardDescription>Manage tags and moderate comments.</CardDescription>
         </CardHeader>
         <CardContent class="space-y-2">
-          <Button class="w-full justify-start" variant="secondary">Manage Master Tags</Button>
+
+          <Button class="w-full justify-start" variant="secondary" as-child>
+            <NuxtLink to="/tags">Manage Master Tags</NuxtLink>
+          </Button>
           <Button class="w-full justify-start" variant="secondary">Review Pending Comments</Button>
         </CardContent>
       </Card>

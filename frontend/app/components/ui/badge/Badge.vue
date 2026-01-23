@@ -7,7 +7,7 @@ import { Primitive } from "reka-ui"
 import { cn } from "@/lib/utils"
 import { badgeVariants } from "."
 
-const props = defineProps< /* @vue-ignore */ PrimitiveProps & {
+const props = defineProps< PrimitiveProps & {
   variant?: BadgeVariants["variant"]
   class?: HTMLAttributes["class"]
 }>()

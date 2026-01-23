@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6b9f52e5-bc16-4bc2-86d1-087d6055d9a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/dtos/UserDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/entities/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/layouts/default.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/layouts/default.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/pages/tags.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/pages/tags.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,14 +51,15 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "setup-projeto",
+    "git-widget-placeholder": "profile",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Lenovo/OneDrive - IPLeiria/Desktop/DAE/DAE-PROJECT",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "C:\\Users\\Lenovo\\Desktop\\3_ANO\\DAE_PROJECT\\academics\\frontend\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.2.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -72,7 +73,8 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Lenovo\Desktop\3_ANO\DAE_PROJECT\academics\frontend\app\pages\publications\update" />
+      <recent name="C:\Users\Lenovo\OneDrive - IPLeiria\Desktop\DAE\DAE-PROJECT\frontend\app\pages\auth" />
+      <recent name="C:\Users\Lenovo\OneDrive - IPLeiria\Desktop\DAE\DAE-PROJECT\frontend\public" />
       <recent name="C:\Users\Lenovo\OneDrive - IPLeiria\Desktop\DAE\DAE-PROJECT\frontend\app" />
     </key>
   </component>
@@ -93,6 +95,8 @@
       <updated>1769085295632</updated>
       <workItem from="1769085296290" duration="5393000" />
       <workItem from="1769095330036" duration="9801000" />
+      <workItem from="1769133494080" duration="37000" />
+      <workItem from="1769139795411" duration="16364000" />
     </task>
     <servers />
   </component>
