@@ -43,6 +43,13 @@ public class ActivityLogService {
         return ActivityLogDTO.from(activityLogBean.findUserActivity(id));
     }
 
+    @GET
+    @Path("/publication/{id}")
+    public Response getActivityLogOfPublication(@PathParam("id") int id) {
+        var logs = activityLogBean.findPublicationActivity(id);
+        return Response.ok(ActivityLogDTO.from(logs)).build();
+    }
+
     @POST
     @Path("/")
     public Response addActivityLog(ActivityLogDTO activityLogDTO) {

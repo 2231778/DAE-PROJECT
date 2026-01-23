@@ -31,6 +31,14 @@ public class ActivityLogBean {
                 .getResultList();
     }
 
+    public List<ActivityLog> findPublicationActivity(Integer id) {
+        return entityManager.createQuery(
+                        "SELECT l FROM ActivityLog l WHERE l.publication.id = :pubId ORDER BY l.timestamp DESC",
+                        ActivityLog.class)
+                .setParameter("pubId", id)
+                .getResultList();
+    }
+
     public List<ActivityLog> findAll(){
         return entityManager.createNamedQuery("getAllActivityLog",ActivityLog.class).getResultList();
     }

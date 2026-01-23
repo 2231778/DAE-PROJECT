@@ -62,6 +62,10 @@
                   <NuxtLink to="/profile" class="w-full cursor-pointer">👤 My Profile</NuxtLink>
                 </DropdownMenuItem>
 
+                <DropdownMenuItem as-child>
+                  <NuxtLink to="/publications/mine" class="w-full cursor-pointer">📚 My Publications</NuxtLink>
+                </DropdownMenuItem>
+
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem @click="handleLogout" class="text-red-600 cursor-pointer focus:bg-red-50 focus:text-red-600">
