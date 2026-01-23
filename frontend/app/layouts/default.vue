@@ -63,10 +63,6 @@
                   <NuxtLink to="/profile" class="w-full cursor-pointer">👤 My Profile</NuxtLink>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem v-if="canManageTags" as-child>
-                  <NuxtLink to="/tags" class="w-full cursor-pointer">🏷️ Manage Tags</NuxtLink>
-                </DropdownMenuItem>
-
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem @click="handleLogout" class="text-red-600 cursor-pointer focus:bg-red-50 focus:text-red-600">
