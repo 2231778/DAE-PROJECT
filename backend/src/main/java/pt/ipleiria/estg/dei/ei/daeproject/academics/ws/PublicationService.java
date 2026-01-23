@@ -9,6 +9,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import org.hibernate.Hibernate;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.Enums.Visibility;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.dtos.*;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.ejbs.CommentBean;
@@ -21,6 +23,8 @@ import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.Rating;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.entities.User;
 import pt.ipleiria.estg.dei.ei.daeproject.academics.security.Authenticated;
 
+import java.io.InputStream;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
@@ -77,32 +81,55 @@ public class PublicationService {
 
 
 
-    //TODO: MAKE THE FILE UPLOAD
     @POST
     @Path("/")
-    public Response createPublication(PublicationDTO publicationDTO) {
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response createPublication(MultipartFormDataInput form) {
         try {
-            User publisher = userBean.find(publicationDTO.getPublisher().getId());
+            Map<String, List<InputPart>> uploadForm = form.getFormDataMap();
 
-            if (publisher == null) {
-                return Response.status(Response.Status.BAD_REQUEST)
-                        .entity("Publisher not found")
-                        .build();
+            // 1. Extract Text Fields
+            String title = uploadForm.get("title").get(0).getBody(String.class, null);
+            String description = uploadForm.get("description").get(0).getBody(String.class, null);
+            String author = uploadForm.get("author").get(0).getBody(String.class, null);
+            int publisherId = Integer.parseInt(uploadForm.get("publisherId").get(0).getBody(String.class, null));
+
+            // 2. Extract the File
+            InputPart filePart = uploadForm.get("file").get(0);
+            InputStream inputStream = filePart.getBody(InputStream.class, null);
+            String fileName = getFileName(filePart);
+
+            // --- FILE SAVING LOGIC START ---
+            String uploadDir = "/tmp/uploads";
+            java.nio.file.Path uploadPath = Paths.get(uploadDir);
+
+            // Create directory if it doesn't exist
+            if (!java.nio.file.Files.exists(uploadPath)) {
+                java.nio.file.Files.createDirectories(uploadPath);
             }
 
+            // Create the full file path
+            java.nio.file.Path filePath = uploadPath.resolve(fileName);
+
+            // Save the file (Standard Java 7+ way)
+            java.nio.file.Files.copy(inputStream, filePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            // --- FILE SAVING LOGIC END ---
+
+            User publisher = userBean.find(publisherId);
+            if (publisher == null) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Publisher not found").build();
+            }
 
             Publication newPublication = publicationBean.create(
-                    publicationDTO.getTitle(),
-                    publicationDTO.getDescription(),
-                    publicationDTO.getFile(),
+                    title,
+                    description,
+                    fileName, // Storing the filename in the DB
                     publisher,
-                    publicationDTO.getAuthor()
+                    author
             );
 
-            PublicationDTO responseDTO = PublicationDTO.from(newPublication);
-
             return Response.status(Response.Status.CREATED)
-                    .entity(responseDTO)
+                    .entity(PublicationDTO.from(newPublication))
                     .build();
 
         } catch (Exception e) {
@@ -110,41 +137,126 @@ public class PublicationService {
                     .entity("Failed to create publication: " + e.getMessage())
                     .build();
         }
-
     }
 
-    //TODO: UPDATE THE FILE
+    @GET
+    @Path("/{id}/download")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response downloadFile(@PathParam("id") int id) {
+        try {
+            // 1. Find the publication in the database
+            Publication publication = publicationBean.find(id);
+
+            if (publication == null || publication.getFile() == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("Publication or file not found")
+                        .build();
+            }
+
+            // 2. Locate the file on the disk
+            String fileName = publication.getFile();
+            java.nio.file.Path filePath = java.nio.file.Paths.get("/tmp/uploads").resolve(fileName);
+
+            if (!java.nio.file.Files.exists(filePath)) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("File not found on server")
+                        .build();
+            }
+
+            // 3. Prepare the response with the file stream
+            java.io.File file = filePath.toFile();
+
+            return Response.ok(file)
+                    .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
+                    .build();
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error downloading file: " + e.getMessage())
+                    .build();
+        }
+    }
+
+
+    // Helper to extract filename from RESTEasy InputPart
+    private String getFileName(InputPart part) {
+        String[] contentDisposition = part.getHeaders().getFirst("Content-Disposition").split(";");
+        for (String filename : contentDisposition) {
+            if ((filename.trim().startsWith("filename"))) {
+                String[] name = filename.split("=");
+                return name[1].trim().replaceAll("\"", "");
+            }
+        }
+        return "unknown";
+    }
+
     @PATCH
     @Path("/{id}")
-    public Response updatePublication(@PathParam("id") Integer id, PublicationDTO publicationDTO) {
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response updatePublication(
+            @PathParam("id") Integer id,
+            MultipartFormDataInput form
+    ) {
         try {
+            Map<String, List<InputPart>> uploadForm = form.getFormDataMap();
 
+            // 1. Extract Text Fields
+            String title = uploadForm.get("title").get(0).getBody(String.class, null);
+            String description = uploadForm.get("description").get(0).getBody(String.class, null);
+            String author = uploadForm.get("author").get(0).getBody(String.class, null);
+            int publisherId = Integer.parseInt(uploadForm.get("publisherId").get(0).getBody(String.class, null));
+
+            // 2. Extract File (optional)
+            String newFileName = null;
+            InputPart filePart = uploadForm.get("file") != null ? uploadForm.get("file").get(0) : null;
+
+            if (filePart != null) {
+                InputStream inputStream = filePart.getBody(InputStream.class, null);
+                newFileName = getFileName(filePart);
+
+                String uploadDir = "/tmp/uploads";
+                java.nio.file.Path uploadPath = Paths.get(uploadDir);
+
+                if (!java.nio.file.Files.exists(uploadPath)) {
+                    java.nio.file.Files.createDirectories(uploadPath);
+                }
+
+                java.nio.file.Path filePath = uploadPath.resolve(newFileName);
+                java.nio.file.Files.copy(inputStream, filePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+                // TODO: delete old file if needed
+                Publication oldPub = publicationBean.find(id);
+                if (oldPub.getFile() != null) {
+                    java.nio.file.Path oldFilePath = uploadPath.resolve(oldPub.getFile());
+                    java.nio.file.Files.deleteIfExists(oldFilePath);
+                }
+            }
+
+            // 3. Find publisher
+            User publisher = userBean.find(publisherId);
+            if (publisher == null) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Publisher not found").build();
+            }
+
+            // 4. Update publication
             publicationBean.update(
                     id,
-                    publicationDTO.getTitle(),
-                    publicationDTO.getDescription(),
-                    publicationDTO.getFile(),
-                    publicationDTO.getAuthor()
+                    title,
+                    description,
+                    newFileName,
+                    author
             );
 
-
-            //TODO: ( DELETE THE OLD FILE )
-            //TODO: ( ADD THE NEW FILE )
-
-            // Return the updated Publication
             Publication updatedPublication = publicationBean.find(id);
             return Response.ok(PublicationDTO.from(updatedPublication)).build();
+
         } catch (IllegalArgumentException e) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(e.getMessage())
-                    .build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Failed to update Publication: " + e.getMessage())
                     .build();
         }
-
-
     }
 
     @PATCH
@@ -238,6 +350,28 @@ public class PublicationService {
         CommentDTO dto = commentBean.update(idComment, commentDTO.getContent());
 
         return Response.ok(dto).build();
+    }
+
+    @PATCH
+    @Path("/{idPublication}/comments/{idComment}/visibility")
+    public Response updateCommentVisibility(
+            @PathParam("idPublication") Integer idPublication,
+            @PathParam("idComment") Integer idComment,
+            CommentDTO commentDTO) {
+        try {
+            commentBean.visibility(idComment);
+            var updatedComment = commentBean.find(idComment);
+
+            return Response.ok(CommentDTO.from(updatedComment)).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Failed to toggle Publication Visibility: " + e.getMessage())
+                    .build();
+        }
     }
 
     @DELETE
@@ -340,13 +474,12 @@ public class PublicationService {
 
     // ------------------------------  Tags ----------------
     @POST
-    @Path("/subscriptions")
-    public Response addSubscription(@Context SecurityContext securityContext, TagDTO tagDTO) {
-        // Get the current authenticated user's ID from the SecurityContext
-        Integer userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
+    @Path("{id}/subscriptions")
+    public Response addSubscription(@PathParam("id") Integer id,@Context SecurityContext securityContext, TagDTO tagDTO) {
+
 
         try{
-            Publication publication = publicationBean.subscribeTag(userId,tagDTO.getId());
+            Publication publication = publicationBean.subscribeTag(id,tagDTO.getId());
             List<TagDTO> dto = TagDTO.from(publication.getTags());
             return Response.ok(dto).build();
         }
@@ -356,12 +489,11 @@ public class PublicationService {
     }
 
     @DELETE
-    @Path("/subscriptions")
+    @Path("{id}/subscriptions")
     @RolesAllowed({"ADMIN","RESPONSAVEL"})
-    public Response deleteSubscription(@Context SecurityContext securityContext, TagDTO tagDTO) {
-        Integer userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
+    public Response deleteSubscription(@PathParam("id") Integer id,@Context SecurityContext securityContext, TagDTO tagDTO) {
         try{
-            Publication publication = publicationBean.unsubscribeTag(userId,tagDTO.getId());
+            Publication publication = publicationBean.unsubscribeTag(id,tagDTO.getId());
             List<TagDTO> dto = TagDTO.from(publication.getTags());
             return Response.ok(dto).build();
         }
@@ -387,7 +519,6 @@ public class PublicationService {
         }
 
     }
-
 
 
 }
