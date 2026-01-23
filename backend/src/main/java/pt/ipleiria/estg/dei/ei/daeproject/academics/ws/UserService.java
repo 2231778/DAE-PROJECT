@@ -221,4 +221,23 @@ public class UserService {
         }
 
     }
+
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteUser(@PathParam("id") Integer id) {
+        try {
+            userBean.delete(id);
+            return Response.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Failed to delete user")
+                    .build();
+        }
+    }
+
 }

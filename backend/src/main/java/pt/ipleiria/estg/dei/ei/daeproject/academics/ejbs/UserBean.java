@@ -249,6 +249,18 @@ public class UserBean {
 
     public boolean canLogin(String email, String password) {
         User user = findByEmail(email);
-        return user != null && Hasher.verify(password, user.getPassword());
+        return user != null && Hasher.verify(password, user.getPassword()) && user.getStatus() == Status.Active && !user.isDeleted();
     }
+
+    public User delete(Integer id) {
+        User user = find(id);
+        if (user == null) throw new IllegalArgumentException("User not found");
+
+        user.setDeleted(true);
+        entityManager.merge(user);
+
+        activityLogBean.create(ActionType.DELETE, "User set to deleted", user);
+        return user;
+    }
+
 }
