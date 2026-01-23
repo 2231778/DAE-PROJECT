@@ -17,13 +17,12 @@
           <div v-if="authStore.token" class="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
             <NuxtLink to="/publications" class="hover:text-primary transition-colors">Publications</NuxtLink>
 
-            <NuxtLink
-                v-if="canManageTags"
-                to="/tags"
-                class="hover:text-primary transition-colors"
-            >
-              Tags
-            </NuxtLink>
+            <NuxtLink v-if="canManageTags" to="/tags" class="hover:text-primary transition-colors">Tags</NuxtLink>
+
+            <template v-if="isAdmin">
+              <NuxtLink to="/admin/users" class="hover:text-primary transition-colors">Users</NuxtLink>
+              <NuxtLink to="/admin/logs" class="hover:text-primary transition-colors">Activity Logs</NuxtLink>
+            </template>
           </div>
         </div>
 
@@ -110,35 +109,27 @@ import {
 
 const authStore = useAuthStore()
 
-// Lógica de Permissão para as Tags
+// 1. Lógica de Administrador (Para Gestão de Users e Logs)
+const isAdmin = computed(() => {
+  return authStore.user?.role?.toUpperCase() === 'ADMIN'
+})
+
+// 2. Lógica de Tags (ADMIN ou RESPONSAVEL)
 const canManageTags = computed(() => {
   const role = authStore.user?.role?.toUpperCase() || ''
   return role === 'ADMIN' || role === 'RESPONSAVEL'
 })
 
-// Configuração dos Badges de Cargo
+// 3. Configuração dos Badges
 const roleBadgeConfig = computed(() => {
   const role = authStore.user?.role?.toUpperCase() || ''
-
   switch (role) {
     case 'ADMIN':
-      return {
-        label: 'Administrator',
-        class: 'bg-red-50 text-red-700 border-red-100 italic',
-        emoji: '🛡️'
-      }
+      return { label: 'Administrator', class: 'bg-red-50 text-red-700 border-red-100', emoji: '🛡️' }
     case 'RESPONSAVEL':
-      return {
-        label: 'Lead Researcher',
-        class: 'bg-amber-50 text-amber-700 border-amber-100',
-        emoji: '🔬'
-      }
+      return { label: 'Lead Researcher', class: 'bg-amber-50 text-amber-700 border-amber-100', emoji: '🔬' }
     default:
-      return {
-        label: 'Collaborator',
-        class: 'bg-slate-50 text-slate-600 border-slate-100',
-        emoji: '🎓'
-      }
+      return { label: 'Collaborator', class: 'bg-slate-50 text-slate-600 border-slate-100', emoji: '🎓' }
   }
 })
 

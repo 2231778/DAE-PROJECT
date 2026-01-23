@@ -6,16 +6,20 @@ export const useUserStore = defineStore('userStore', () => {
     const auth = useAuthStore()
     const isLoading = ref(false)
     const users = ref([])
+    const allActivityLogs = ref([]) // Novo: Para a página de auditoria global
 
-    // URL Base
+    // URLs Base
     const API_BASE = 'http://localhost:8080/academics/api/users'
+    const LOGS_BASE = 'http://localhost:8080/academics/api/activity-log'
 
     const getHeaders = () => ({
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${auth.token}`
     })
 
-    // GET: Listar todos
+    // --- UTILIZADORES ---
+
+    // GET: Listar todos (Admin)
     async function fetchUsers() {
         isLoading.value = true
         try {
@@ -43,12 +47,11 @@ export const useUserStore = defineStore('userStore', () => {
         }
     }
 
-    // PATCH: Atualizar Dados Gerais (Nome, Email, Role)
-    // Rota: http://localhost:8080/academics/api/users/{id}
+    // PATCH: Atualizar Nome, Email ou Role
     async function updateUser(id, payload) {
         try {
             await $fetch(`${API_BASE}/${id}`, {
-                method: 'PATCH', // Corrigido para PATCH
+                method: 'PATCH',
                 headers: getHeaders(),
                 body: payload
             })
@@ -59,24 +62,20 @@ export const useUserStore = defineStore('userStore', () => {
         }
     }
 
-    // PATCH: Mudar Apenas o Status (Ativo/Inativo)
-    // Rota: http://localhost:8080/academics/api/users/{id}/status
-    async function changeUserStatus(id, newStatus) {
+    // PATCH: Alternar Status (Ativo <-> Inativo)
+    async function toggleUserStatus(id) {
         try {
-            // Esta rota é específica para status, conforme o seu Bruno
             await $fetch(`${API_BASE}/${id}/status`, {
                 method: 'PATCH',
-                headers: getHeaders(),
-                body: { status: newStatus }
+                headers: getHeaders()
             })
 
-            // Atualizamos a lista localmente para ser mais rápido
             const user = users.value.find(u => u.id === id)
-            if (user) user.status = newStatus
-
+            if (user) {
+                user.status = user.status === 'Active' ? 'Inactive' : 'Active'
+            }
         } catch (error) {
             console.error('Erro ao mudar estado:', error)
-            throw error
         }
     }
 
@@ -94,7 +93,32 @@ export const useUserStore = defineStore('userStore', () => {
         }
     }
 
+    // --- LOGS DE ATIVIDADE ---
+
+    // GET: Listar TODO o histórico do sistema (Auditoria Global)
+    async function fetchAllActivityLogs() {
+        isLoading.value = true
+        try {
+            const data = await $fetch(LOGS_BASE, {
+                headers: { 'Authorization': `Bearer ${auth.token}` }
+            })
+            allActivityLogs.value = data
+        } catch (error) {
+            console.error('Erro ao buscar logs globais:', error)
+        } finally {
+            isLoading.value = false
+        }
+    }
+
     return {
-        users, isLoading, fetchUsers, createUser, updateUser, changeUserStatus, deleteUser
+        users,
+        allActivityLogs,
+        isLoading,
+        fetchUsers,
+        createUser,
+        updateUser,
+        toggleUserStatus,
+        deleteUser,
+        fetchAllActivityLogs
     }
 })

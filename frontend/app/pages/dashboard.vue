@@ -51,21 +51,6 @@
     </div>
 
     <div class="grid gap-8 md:grid-cols-2 mt-8">
-      <Card v-if="authStore.user?.role === 'ADMIN'" class="border-red-100 bg-red-50/10">
-        <CardHeader>
-          <CardTitle>Administration Hub</CardTitle>
-          <CardDescription>Management tools for users and system roles.</CardDescription>
-        </CardHeader>
-        <CardContent class="space-y-2">
-
-          <Button class="w-full justify-start" variant="secondary" as-child>
-            <NuxtLink to="/users">Manage Users</NuxtLink>
-          </Button>
-
-          <Button class="w-full justify-start" variant="secondary">View System Logs</Button>
-        </CardContent>
-      </Card>
-
       <Card v-if="['ADMIN', 'Responsável'].includes(authStore.user?.role)" class="border-blue-100 bg-blue-50/10">
         <CardHeader>
           <CardTitle>Curation Tools</CardTitle>
