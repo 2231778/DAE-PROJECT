@@ -12,13 +12,14 @@ import java.io.IOException;
 public class CorsFilter implements ContainerResponseFilter {
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
-        responseContext.getHeaders().add("Access-Control-Allow-Origin", "*");
-        responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");
-        responseContext.getHeaders().add("Access-Control-Allow-Methods", "*");
-        responseContext.getHeaders().add("Access-Control-Allow-Headers", "*");
-        if (requestContext.getMethod().equals("OPTIONS")) {
-            responseContext.setStatus(Response.Status.ACCEPTED.getStatusCode());
-        }
 
+        responseContext.getHeaders().putSingle("Access-Control-Allow-Origin", "http://localhost:3000");
+        responseContext.getHeaders().putSingle("Access-Control-Allow-Credentials", "true");
+        responseContext.getHeaders().putSingle("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
+        responseContext.getHeaders().putSingle("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization");
+
+        if (requestContext.getMethod().equalsIgnoreCase("OPTIONS")) {
+            responseContext.setStatus(Response.Status.OK.getStatusCode());
+        }
     }
 }

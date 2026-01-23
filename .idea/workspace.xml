@@ -5,8 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b9f52e5-bc16-4bc2-86d1-087d6055d9a6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/pages/dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/pages/dashboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/UserBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/UserBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/providers/CorsFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/providers/CorsFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ws/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ws/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/badge/Badge.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/badge/Badge.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/button/Button.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/button/Button.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/input/Input.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/input/Input.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/label/Label.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/label/Label.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/layouts/default.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/layouts/default.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/pages/auth/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/pages/auth/login.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,19 +47,23 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "gestao-tags",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "profile",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Lenovo/OneDrive - IPLeiria/Desktop/DAE/DAE-PROJECT",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "C:\\Users\\fatim\\Desktop\\DAE\\DAE-PROJECT\\frontend\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.2.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Lenovo\OneDrive - IPLeiria\Desktop\DAE\DAE-PROJECT\frontend\app\pages\auth" />
+      <recent name="C:\Users\Lenovo\OneDrive - IPLeiria\Desktop\DAE\DAE-PROJECT\frontend\public" />
       <recent name="C:\Users\Lenovo\OneDrive - IPLeiria\Desktop\DAE\DAE-PROJECT\frontend\app" />
     </key>
   </component>
@@ -70,6 +84,8 @@
       <updated>1769085295632</updated>
       <workItem from="1769085296290" duration="5393000" />
       <workItem from="1769095330036" duration="9801000" />
+      <workItem from="1769133494080" duration="37000" />
+      <workItem from="1769139795411" duration="14267000" />
     </task>
     <servers />
   </component>
