@@ -59,6 +59,14 @@
               Sign In
             </template>
           </Button>
+          <div class="text-center mt-4">
+            <NuxtLink
+                to="/auth/forgot-password"
+                class="text-xs text-slate-500 hover:text-blue-600 transition-colors"
+            >
+              Forgot your password?
+            </NuxtLink>
+          </div>
         </form>
       </CardContent>
     </Card>
