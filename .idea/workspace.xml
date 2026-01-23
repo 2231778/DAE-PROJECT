@@ -5,18 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b9f52e5-bc16-4bc2-86d1-087d6055d9a6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/UserBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ejbs/UserBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/providers/CorsFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/providers/CorsFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ws/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/pt/ipleiria/estg/dei/ei/daeproject/academics/ws/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/badge/Badge.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/badge/Badge.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/button/Button.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/button/Button.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/input/Input.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/input/Input.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/components/ui/label/Label.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/components/ui/label/Label.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/app/layouts/default.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/layouts/default.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/pages/auth/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/pages/auth/login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/pages/tags.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/pages/tags.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +76,7 @@
       <workItem from="1769085296290" duration="5393000" />
       <workItem from="1769095330036" duration="9801000" />
       <workItem from="1769133494080" duration="37000" />
-      <workItem from="1769139795411" duration="14267000" />
+      <workItem from="1769139795411" duration="16364000" />
     </task>
     <servers />
   </component>
