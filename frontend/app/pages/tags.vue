@@ -37,11 +37,11 @@
           <td class="p-4">
             <button
                 @click="tagStore.toggleVisibility(tag.id)"
-                :class="tag.visibility ? 'bg-green-500' : 'bg-slate-300'"
+                :class="tag.visibility === 'VISIBLE' ? 'bg-green-500' : 'bg-slate-300'"
                 class="relative inline-flex h-5 w-10 items-center rounded-full transition-colors cursor-pointer shadow-inner"
             >
                 <span
-                    :class="tag.visibility ? 'translate-x-5' : 'translate-x-1'"
+                    :class="tag.visibility === 'VISIBLE' ? 'translate-x-5' : 'translate-x-1'"
                     class="inline-block h-3 w-3 transform rounded-full bg-white transition-transform"
                 />
             </button>
@@ -103,16 +103,6 @@
             ></textarea>
           </div>
 
-          <div class="space-y-2 pt-2" v-if="!isEditing">
-            <label class="flex items-center gap-3 cursor-pointer group">
-              <input
-                  type="checkbox"
-                  v-model="form.visibility"
-                  class="w-4 h-4 text-slate-900 rounded border-slate-300 focus:ring-slate-900"
-              />
-              <span class="text-xs font-medium text-slate-600 group-hover:text-slate-900 transition-colors">Make public immediately?</span>
-            </label>
-          </div>
         </div>
 
         <div class="flex justify-end gap-3 pt-4 border-t border-slate-50">
@@ -147,7 +137,6 @@ const currentId = ref(null)
 const form = reactive({
   name: '',
   description: '',
-  visibility: true
 })
 
 // Segurança: Bloqueia utilizadores sem permissões
@@ -173,13 +162,12 @@ function openModal(tag = null) {
     currentId.value = tag.id
     form.name = tag.name
     form.description = tag.description
-    form.visibility = tag.visibility
   } else {
     isEditing.value = false
     currentId.value = null
     form.name = ''
     form.description = ''
-    form.visibility = true
+
   }
   showModal.value = true
 }

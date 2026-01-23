@@ -63,18 +63,19 @@ export const useTagStore = defineStore('tagStore', () => {
 
     async function toggleVisibility(id) {
         try {
-
-            await $fetch(`${API_URL}/${id}/visibility`, {
+            const updatedTag = await $fetch(`${API_URL}/${id}/visibility`, {
                 method: 'PATCH',
                 headers: getHeaders()
             })
 
-            const tag = tags.value.find(t => t.id === id)
-            if (tag) tag.visibility = !tag.visibility
+            tags.value = tags.value.map(tag =>
+                tag.id === id ? updatedTag : tag
+            )
         } catch (error) {
             console.error('Erro ao mudar visibilidade:', error)
         }
     }
+
 
 
     async function deleteTag(id) {
